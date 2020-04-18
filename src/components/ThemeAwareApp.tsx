@@ -24,17 +24,39 @@ const theme = createMuiTheme({
     typography: {
         useNextVariants: true,
         fontFamily: [
+            '"Helvetica"',
             "Courier",
             "-apple-system",
             "BlinkMacSystemFont",
             '"Segoe UI"',
             "Roboto",
-            '"Helvetica Neue"',
             "sans-serif",
             '"Apple Color Emoji"',
             '"Segoe UI Emoji"',
             '"Segoe UI Symbol"'
-        ].join(",")
+        ].join(","),
+        h1: {
+          fontWeight: 300
+        },
+        h2: {
+          fontWeight: 300
+        },
+        h3: {
+          fontWeight: 300
+        },
+        h4: {
+          fontWeight: 300,
+          fontSize: 27
+        },
+        h5: {
+          fontWeight: 300,
+        },
+        h6: {
+          fontWeight: 300,
+        },
+        button: {
+          fontWeight: 300,
+        }
     }
 });
 
