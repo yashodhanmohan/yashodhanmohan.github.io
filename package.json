@@ -80,7 +80,7 @@
     "@types/youtube": "0.0.37",
     "core-js": "^3.6.5",
     "file-saver": "^2.0.2",
-    "jszip": "^3.3.0",
+    "jszip": "^3.7.0",
     "normalize.css": "^8.0.1",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
