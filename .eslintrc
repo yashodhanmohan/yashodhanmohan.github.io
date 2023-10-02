@@ -1,9 +1,0 @@
-{
-    "parser": "babel-eslint",
-    "rules": {
-        "semi": ["error", "always"]
-    },
-    "plugins": [
-        "react"
-    ]
-}
