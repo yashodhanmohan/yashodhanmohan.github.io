@@ -1,38 +1,37 @@
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  color: #FFA500;
+  font-size: 64px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-flow: row wrap;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-content: center;
+  align-items: baseline;
 }
 
-.App-link {
-  color: #61dafb;
+.NameHero {
+  flex-grow: 5;
+  padding-left: 10%;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.VerticalBreakLine {
+  border-left: 1px solid #FFA500;
+  width: 0px;
+  align-self: stretch;
+}
+
+.CommonNounHero {
+  flex-grow: 5;
+  text-align: right;
+  padding-right: 10%;
+  font-family: 'Quicksand-Light', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+}
+
+.HorizontalBreakLine {
+  border-top: 1px solid #FFA500;
+  margin-top: 50px;
+}
+
+.LowerBlock {
+  background-image: url('../public/home-background.jpeg');
+  height: 100px;
 }

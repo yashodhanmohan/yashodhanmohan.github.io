@@ -1,24 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <div className="App">
+        <div className="NameHero">
+          <span style={{ color: 'white' }}>y</span>ashodhan
+          <br />
+          <span style={{ color: 'white' }}>m</span>ohan
+          <br />
+          <span style={{ color: 'white' }}>b</span>hatnagar
+        </div>
+        <div className="VerticalBreakLine"></div>
+        <div className="CommonNounHero">
+          human
+          <br />
+          engineer
+          <br />
+          writer
+        </div>
+      </div>
+      <div className="HorizontalBreakLine"></div>
+      <div className="LowerBlock"></div>
     </div>
   );
 }
