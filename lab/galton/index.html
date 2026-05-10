@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Galton board — Lab</title>
+    <meta
+      name="description"
+      content="A physics-driven Galton board. Watch the central limit theorem unfold a Gaussian out of a peg lattice."
+    />
+    <meta name="color-scheme" content="light dark" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/lab/lab.css" />
+    <link rel="stylesheet" href="/lab/galton/galton.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="orb orb-a" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <a class="mark" href="/">YMB</a>
+      <span class="status">
+        <span class="dot"></span>
+        Vadodara · IST
+      </span>
+    </header>
+
+    <main class="artifact">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/">portfolio</a>
+        <span aria-hidden="true">›</span>
+        <a href="/lab/">lab</a>
+        <span aria-hidden="true">›</span>
+        <span>galton</span>
+      </nav>
+
+      <h1 class="artifact-title">Galton board<span class="end-dot">.</span></h1>
+      <p class="artifact-lede">
+        A toy for the
+        <a
+          href="https://en.wikipedia.org/wiki/Central_limit_theorem"
+          target="_blank"
+          rel="noreferrer"
+          >central limit theorem</a
+        >. Balls fall through a triangular peg lattice — gravity tilts a touch
+        according to the <em>bias</em> slider, so each ball drifts toward one
+        side at every peg — and the bins at the bottom keep a running tally.
+        The empirical histogram is what actually happened; the cobalt curve
+        drawn over it is the
+        <a
+          href="https://en.wikipedia.org/wiki/Binomial_distribution"
+          target="_blank"
+          rel="noreferrer"
+          >Binomial(N, p)</a
+        >
+        you'd predict if every peg were a perfect coin flip — which the
+        physics only approximates, but which a
+        <a
+          href="https://en.wikipedia.org/wiki/Normal_distribution"
+          target="_blank"
+          rel="noreferrer"
+          >normal</a
+        >
+        bell hugs more tightly as N grows. The original device,
+        <a
+          href="https://en.wikipedia.org/wiki/Galton_board"
+          target="_blank"
+          rel="noreferrer"
+          >Galton's quincunx</a
+        >, is one of the cleanest "math is real" demos you can build.
+      </p>
+
+      <section class="galton" aria-label="Galton board">
+        <div class="galton-board">
+          <canvas id="board" aria-label="Pegboard with falling balls"></canvas>
+        </div>
+        <aside class="galton-stats" aria-label="Statistics">
+          <span class="ctrl-label">stats</span>
+          <div class="stats-list">
+            <div class="stat">
+              <span class="stat-label">dropped</span>
+              <span class="stat-value" id="dropCount">0</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">sample mean</span>
+              <span class="stat-value" id="mean">—</span>
+              <span class="stat-theory">
+                theory <span id="meanTheory">—</span>
+              </span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">sample σ</span>
+              <span class="stat-value" id="sigma">—</span>
+              <span class="stat-theory">
+                theory <span id="sigmaTheory">—</span>
+              </span>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="galton-controls">
+        <div class="ctrl-row sliders">
+          <label class="row-control">
+            <span class="label-row">
+              <span>rows</span><span class="value" id="rowsValue">10</span>
+            </span>
+            <input
+              type="range"
+              id="rows"
+              min="4"
+              max="16"
+              step="1"
+              value="10"
+            />
+          </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>bias</span><span class="value" id="biasValue">0.50</span>
+            </span>
+            <input
+              type="range"
+              id="bias"
+              min="0.05"
+              max="0.95"
+              step="0.01"
+              value="0.5"
+            />
+          </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>rate</span><span class="value" id="rateValue">60 / s</span>
+            </span>
+            <input
+              type="range"
+              id="rate"
+              min="0"
+              max="250"
+              step="1"
+              value="60"
+            />
+          </label>
+        </div>
+        <div class="ctrl-row buttons">
+          <button id="dropOne" type="button">drop one</button>
+          <button id="reset" type="button">reset</button>
+          <button id="playPause" type="button">pause</button>
+        </div>
+      </section>
+
+      <section class="notes">
+        <h2>What you're looking at.</h2>
+        <p>
+          Each ball begins as the same kind of "experiment" — a sequence of
+          tiny chance events as it ricochets between pegs. Individually the
+          path is unpredictable; in aggregate the central limit theorem
+          guarantees the bins at the bottom are roughly normal, with mean
+          <em>Np</em> and standard deviation <em>√(Np(1-p))</em>. Slide
+          <em>bias</em> away from <em>0.5</em> and watch the peak march
+          sideways; raise <em>rows</em> and the bell narrows relative to its
+          mean — the law of large numbers is the same idea looked at once.
+        </p>
+        <p>
+          The bars are real outcomes; the cobalt line over them is the
+          theoretical prediction, scaled to the same total count so they're
+          comparable at a glance. Physics being physics, the empirical
+          distribution won't match the Binomial exactly — bouncing balls
+          aren't perfect coin flips — but the shape and the parameters track
+          very closely. That mismatch is itself a story: real systems are full
+          of "almost Gaussian," and the CLT is what guarantees the
+          almost.
+        </p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>© <span id="year">2026</span> Yashodhan Mohan Bhatnagar</span>
+      <span class="muted">Built quietly in Vadodara.</span>
+    </footer>
+
+    <script src="/lab/galton/galton.js" defer></script>
+  </body>
+</html>

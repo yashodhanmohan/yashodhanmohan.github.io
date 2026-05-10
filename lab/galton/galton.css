@@ -1,0 +1,223 @@
+/* Galton board — artifact-specific layout. Tokens come from /styles.css. */
+
+.galton {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 240px;
+  gap: 2.5rem;
+  align-items: stretch;
+  margin: 0 0 2.5rem;
+}
+
+.galton-board {
+  min-width: 0;
+}
+.galton-board canvas {
+  width: 100%;
+  height: 600px;
+  display: block;
+}
+
+/* stats panel */
+
+.galton-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-self: stretch;
+}
+.galton-stats .ctrl-label {
+  margin-right: 0;
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  color: var(--muted);
+  text-transform: lowercase;
+  letter-spacing: 0.06em;
+}
+
+.stats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.stat-label {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  color: var(--muted);
+  text-transform: lowercase;
+  letter-spacing: 0.04em;
+}
+.stat-value {
+  font-family: var(--serif);
+  font-size: 1.7rem;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  font-feature-settings: "tnum" 1;
+}
+.stat-theory {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+.stat-theory span {
+  color: var(--ink-soft);
+  font-feature-settings: "tnum" 1;
+  margin-left: 0.25rem;
+}
+
+@media (max-width: 820px) {
+  .galton {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+  .galton-board canvas {
+    height: 500px;
+  }
+  .stats-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1.5rem 2.5rem;
+  }
+}
+
+/* controls */
+
+.galton-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+}
+.ctrl-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem 2rem;
+  align-items: center;
+}
+.ctrl-row.sliders {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+.ctrl-row.buttons {
+  justify-content: flex-start;
+  gap: 0.5rem;
+}
+
+.row-control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.row-control .label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-transform: lowercase;
+  letter-spacing: 0.04em;
+}
+.row-control .value {
+  color: var(--ink-soft);
+  font-feature-settings: "tnum" 1;
+}
+
+@media (max-width: 580px) {
+  .ctrl-row.sliders {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
+
+/* range slider — same editorial treatment as sines */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 14px;
+  background: transparent;
+  cursor: pointer;
+  margin: 0;
+}
+input[type="range"]:focus-visible {
+  outline: 2px solid var(--accent-warm);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 1px;
+  background: var(--rule);
+  border: none;
+}
+input[type="range"]::-moz-range-track {
+  height: 1px;
+  background: var(--rule);
+  border: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-warm);
+  margin-top: -6px;
+  border: none;
+  transition: transform 0.15s ease;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-warm);
+  border: none;
+  transition: transform 0.15s ease;
+}
+input[type="range"]:hover::-webkit-slider-thumb,
+input[type="range"]:focus::-webkit-slider-thumb {
+  transform: scale(1.25);
+}
+
+/* buttons */
+.galton-controls button {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  padding: 0.4rem 0.95rem;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+  border-radius: 999px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.galton-controls button:hover {
+  color: var(--accent-warm);
+  border-color: var(--accent-warm);
+}
+.galton-controls button:focus-visible {
+  outline: 2px solid var(--accent-warm);
+  outline-offset: 2px;
+}
+
+/* notes */
+
+.notes em {
+  font-family: var(--mono);
+  font-style: normal;
+  font-size: 0.85em;
+  padding: 0.05em 0.4em;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  color: var(--ink);
+  margin: 0 0.1em;
+}
