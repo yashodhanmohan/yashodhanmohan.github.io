@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lab — Yashodhan Mohan Bhatnagar</title>
+    <meta
+      name="description"
+      content="A garden of small, playable visualizations and explorables."
+    />
+    <meta name="color-scheme" content="light dark" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/lab/lab.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="orb orb-a" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <a class="mark" href="/">YMB</a>
+      <span class="status">
+        <span class="dot"></span>
+        Vadodara · IST
+      </span>
+    </header>
+
+    <main class="lab-shell">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/">portfolio</a>
+        <span aria-hidden="true">›</span>
+        <span>lab</span>
+      </nav>
+
+      <h1 class="lab-title">Lab.</h1>
+      <p class="lab-lede">
+        A garden of small, playable artifacts. Each one tries to make a concept feel
+        a little more like a thing you can hold — sliders, knobs, a canvas to look
+        at. Some are finished; some will be shuttered later. The point is to keep
+        making them.
+      </p>
+
+      <ol class="lab-list">
+        <li>
+          <a href="/lab/sines/" class="lab-card">
+            <span class="lab-num">01</span>
+            <span class="lab-name">Sine combinator</span>
+            <span class="lab-meta">interactive · 2026</span>
+            <span class="lab-desc">
+              Stack four sines and watch a square wave emerge from rotation.
+            </span>
+          </a>
+        </li>
+      </ol>
+    </main>
+
+    <footer class="footer">
+      <span>© <span id="year">2026</span> Yashodhan Mohan Bhatnagar</span>
+      <span class="muted">Built quietly in Vadodara.</span>
+    </footer>
+
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>

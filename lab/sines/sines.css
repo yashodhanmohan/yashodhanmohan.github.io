@@ -1,0 +1,206 @@
+/* Sine combinator — artifact-specific layout. Tokens come from /styles.css. */
+
+.combinator {
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 2.5rem;
+}
+
+.row,
+.composite-row {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 1rem;
+  row-gap: 0.5rem;
+  align-items: center;
+  padding: 1rem 0;
+  border-top: 1px dashed var(--rule);
+}
+.rows .row:first-child {
+  border-top: none;
+}
+.composite-row {
+  border-top: 1px solid var(--ink-soft);
+  padding-top: 1.5rem;
+  padding-bottom: 0.5rem;
+  margin-top: 0.5rem;
+  grid-template-rows: auto;
+}
+
+.circle-canvas {
+  width: 90px;
+  height: 90px;
+  display: block;
+}
+.wave-canvas {
+  width: 100%;
+  height: 90px;
+  display: block;
+}
+.composite-row .wave-canvas {
+  height: 110px;
+}
+
+.row-label {
+  width: 90px;
+  text-align: center;
+}
+.row-label .sigma {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  color: var(--accent-warm);
+}
+
+/* Per-row controls span the full width below the canvases. */
+.row-controls {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  padding: 0.5rem 0 0.25rem;
+}
+
+.row-control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.row-control .label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-transform: lowercase;
+  letter-spacing: 0.04em;
+}
+.row-control .value {
+  color: var(--ink-soft);
+}
+
+/* Range slider — minimal editorial style. */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 14px;
+  background: transparent;
+  cursor: pointer;
+  margin: 0;
+}
+input[type="range"]:focus-visible {
+  outline: 2px solid var(--accent-warm);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 1px;
+  background: var(--rule);
+  border: none;
+}
+input[type="range"]::-moz-range-track {
+  height: 1px;
+  background: var(--rule);
+  border: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-warm);
+  margin-top: -6px;
+  border: none;
+  transition: transform 0.15s ease;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-warm);
+  border: none;
+  transition: transform 0.15s ease;
+}
+input[type="range"]:hover::-webkit-slider-thumb,
+input[type="range"]:focus::-webkit-slider-thumb {
+  transform: scale(1.25);
+}
+input[type="range"]:hover::-moz-range-thumb,
+input[type="range"]:focus::-moz-range-thumb {
+  transform: scale(1.25);
+}
+
+/* Bottom controls strip */
+.combinator-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem 2rem;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+}
+
+.ctrl-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.ctrl-label {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  color: var(--muted);
+  text-transform: lowercase;
+  letter-spacing: 0.06em;
+  margin-right: 0.4rem;
+}
+
+.combinator-controls button {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  padding: 0.4rem 0.95rem;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+  border-radius: 999px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.combinator-controls button:hover {
+  color: var(--accent-warm);
+  border-color: var(--accent-warm);
+}
+.combinator-controls button.active {
+  color: var(--bg);
+  background: var(--accent-warm);
+  border-color: var(--accent-warm);
+}
+.combinator-controls button:focus-visible {
+  outline: 2px solid var(--accent-warm);
+  outline-offset: 2px;
+}
+
+@media (max-width: 580px) {
+  .row,
+  .composite-row {
+    grid-template-columns: 70px 1fr;
+  }
+  .circle-canvas {
+    width: 70px;
+    height: 70px;
+  }
+  .row-label {
+    width: 70px;
+  }
+  .row-controls {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+  }
+}

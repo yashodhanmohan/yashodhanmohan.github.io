@@ -1,0 +1,189 @@
+/* Shared lab page chrome. Inherits design tokens from /styles.css. */
+
+.lab-shell,
+.artifact {
+  position: relative;
+  z-index: 2;
+  margin: 0 auto;
+  padding: 3rem var(--gutter) 5rem;
+}
+.lab-shell {
+  max-width: var(--max);
+}
+.artifact {
+  max-width: 940px;
+}
+
+/* breadcrumb */
+
+.crumbs {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  margin-bottom: 3rem;
+  text-transform: lowercase;
+}
+.crumbs a {
+  color: var(--ink-soft);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.crumbs a:hover {
+  color: var(--accent-warm);
+}
+.crumbs span[aria-hidden] {
+  margin: 0 0.5rem;
+  color: var(--muted);
+}
+
+/* lab index */
+
+.lab-title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  letter-spacing: -0.025em;
+  line-height: 1;
+  margin: 0 0 1.5rem;
+}
+
+.lab-lede {
+  font-family: var(--serif);
+  font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+  color: var(--ink-soft);
+  max-width: 44ch;
+  line-height: 1.5;
+  margin: 0 0 4rem;
+}
+
+.lab-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.lab-list li {
+  border-top: 1px solid var(--rule);
+}
+.lab-list li:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+
+.lab-card {
+  display: grid;
+  grid-template-columns: 3rem 1fr auto;
+  align-items: baseline;
+  column-gap: 1.5rem;
+  row-gap: 0.4rem;
+  padding: 1.75rem 0;
+  text-decoration: none;
+  color: inherit;
+  transition: padding-left 0.3s ease;
+  position: relative;
+}
+.lab-card::before {
+  content: "";
+  position: absolute;
+  left: -0.5rem;
+  top: 50%;
+  width: 0;
+  height: 1px;
+  background: var(--accent-warm);
+  transition: width 0.3s ease;
+}
+.lab-card:hover {
+  padding-left: 1rem;
+}
+.lab-card:hover::before {
+  width: 1rem;
+}
+
+.lab-num {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--accent-warm);
+  letter-spacing: 0.04em;
+}
+.lab-name {
+  font-family: var(--serif);
+  font-size: 1.55rem;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.lab-meta {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  color: var(--muted);
+  text-transform: lowercase;
+  letter-spacing: 0.04em;
+}
+.lab-desc {
+  grid-column: 2 / -1;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  margin-top: 0.1rem;
+}
+
+@media (max-width: 540px) {
+  .lab-card {
+    grid-template-columns: 2.25rem 1fr;
+  }
+  .lab-meta {
+    grid-column: 2;
+    margin-top: 0.1rem;
+  }
+}
+
+/* artifact page header */
+
+.artifact-title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  margin: 0.5rem 0 1.25rem;
+}
+.artifact-title .end-dot {
+  color: var(--accent-warm);
+}
+
+.artifact-lede {
+  font-family: var(--serif);
+  font-size: clamp(1.05rem, 1.4vw, 1.2rem);
+  color: var(--ink-soft);
+  max-width: 56ch;
+  line-height: 1.5;
+  margin: 0 0 3rem;
+}
+.artifact-lede em {
+  font-family: var(--mono);
+  font-style: normal;
+  font-size: 0.85em;
+  padding: 0.05em 0.4em;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  color: var(--ink);
+  margin: 0 0.1em;
+}
+
+.artifact .notes {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--rule);
+  max-width: 60ch;
+}
+.artifact .notes h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 1.4rem;
+  letter-spacing: -0.01em;
+  margin: 0 0 1rem;
+}
+.artifact .notes p {
+  color: var(--ink-soft);
+  margin: 0 0 1rem;
+}
+.artifact .notes p:last-child {
+  margin-bottom: 0;
+}

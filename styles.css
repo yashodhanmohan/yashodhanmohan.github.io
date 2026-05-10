@@ -139,6 +139,11 @@ body {
   color: var(--ink);
   font-weight: 500;
   letter-spacing: 0.16em;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+a.mark:hover {
+  color: var(--accent-warm);
 }
 .topbar .status {
   display: inline-flex;

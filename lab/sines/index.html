@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sine combinator — Lab</title>
+    <meta
+      name="description"
+      content="An interactive sine combinator. Stack four sines, watch a square wave emerge from rotation."
+    />
+    <meta name="color-scheme" content="light dark" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/lab/lab.css" />
+    <link rel="stylesheet" href="/lab/sines/sines.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="orb orb-a" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <a class="mark" href="/">YMB</a>
+      <span class="status">
+        <span class="dot"></span>
+        Vadodara · IST
+      </span>
+    </header>
+
+    <main class="artifact">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/">portfolio</a>
+        <span aria-hidden="true">›</span>
+        <a href="/lab/">lab</a>
+        <span aria-hidden="true">›</span>
+        <span>sines</span>
+      </nav>
+
+      <h1 class="artifact-title">
+        Sine combinator<span class="end-dot">.</span>
+      </h1>
+      <p class="artifact-lede">
+        Each row is one sine. The dot on the circle rotates at that source's
+        frequency; the wave to the right is the projection — what you'd see if
+        you watched the dot's height over time. Stack the four sources and the
+        bottom wave is their sum. Try the <em>square</em> preset.
+      </p>
+
+      <section class="combinator" aria-label="Sine combinator">
+        <div class="rows" id="rows"></div>
+        <div class="composite-row">
+          <div class="row-label"><span class="sigma">Σ</span></div>
+          <canvas
+            class="wave-canvas composite-wave"
+            id="composite"
+            aria-label="Composite waveform"
+          ></canvas>
+        </div>
+      </section>
+
+      <section class="combinator-controls">
+        <div class="ctrl-group">
+          <span class="ctrl-label">presets</span>
+          <button data-preset="sine">sine</button>
+          <button data-preset="square">square</button>
+          <button data-preset="sawtooth">sawtooth</button>
+          <button data-preset="triangle">triangle</button>
+          <button data-preset="reset">reset</button>
+        </div>
+        <div class="ctrl-group">
+          <button id="playPause">pause</button>
+        </div>
+      </section>
+
+      <section class="notes">
+        <h2>What you're looking at.</h2>
+        <p>
+          Every sine wave is a rotation seen from the side. Mark a point on a
+          circle, project its height onto a moving timeline, and you trace a
+          sine. Each row above does this for one source: the circle's radius is
+          the amplitude, how fast the dot rotates is the frequency, and the
+          starting angle is the phase.
+        </p>
+        <p>
+          Add sines together and the bottom row becomes their sum. Stack the
+          right harmonics and recognizable shapes appear — a square wave
+          assembles itself from odd harmonics with amplitudes 4 / (πn); a
+          sawtooth uses every harmonic with alternating signs; a triangle uses
+          odd harmonics with a 1 / n² falloff. Fewer than infinite harmonics is
+          why the corners ring; that's the Gibbs phenomenon.
+        </p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>© <span id="year">2026</span> Yashodhan Mohan Bhatnagar</span>
+      <span class="muted">Built quietly in Vadodara.</span>
+    </footer>
+
+    <script src="/lab/sines/sines.js" defer></script>
+  </body>
+</html>
