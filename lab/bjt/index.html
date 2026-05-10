@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BJT explorer — Lab</title>
+    <meta
+      name="description"
+      content="A common-emitter NPN BJT with live operating point, characteristic curves, and DC load line. Watch cutoff, active, and saturation regions as you change the bias."
+    />
+    <meta name="color-scheme" content="light dark" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/lab/lab.css" />
+    <link rel="stylesheet" href="/lab/bjt/bjt.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="orb orb-a" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <a class="mark" href="/">YMB</a>
+      <span class="status">
+        <span class="dot"></span>
+        Vadodara · IST
+      </span>
+    </header>
+
+    <main class="artifact">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/">portfolio</a>
+        <span aria-hidden="true">›</span>
+        <a href="/lab/">lab</a>
+        <span aria-hidden="true">›</span>
+        <span>bjt</span>
+      </nav>
+
+      <h1 class="artifact-title">
+        BJT explorer<span class="end-dot">.</span>
+      </h1>
+      <p class="artifact-lede">
+        A toy for the
+        <a
+          href="https://en.wikipedia.org/wiki/Bipolar_junction_transistor"
+          target="_blank"
+          rel="noreferrer"
+          >bipolar junction transistor</a
+        >. The component in introductory analog electronics that most people I
+        know found genuinely confusing — three terminals, two PN junctions, four
+        operating regions, and the disorienting fact that a tiny base current
+        controls a much larger collector current. This widget lays out a single
+        <a
+          href="https://en.wikipedia.org/wiki/Common_emitter"
+          target="_blank"
+          rel="noreferrer"
+          >common-emitter</a
+        >
+        NPN circuit, and as you slide the biasing components it traces a live
+        operating point across the family of
+        <a
+          href="https://en.wikipedia.org/wiki/Current%E2%80%93voltage_characteristic"
+          target="_blank"
+          rel="noreferrer"
+          >characteristic curves</a
+        >
+        and the DC load line. The curve family, the saturation knee, the active
+        flat top — they all become moving parts you can poke at.
+      </p>
+
+      <section class="bjt" aria-label="BJT explorer">
+        <div class="bjt-main">
+          <div class="bjt-schematic">
+            <span class="ctrl-label">circuit</span>
+            <canvas id="schematic" aria-label="Common-emitter NPN circuit"></canvas>
+          </div>
+          <div class="bjt-curves">
+            <span class="ctrl-label">I<sub>C</sub> vs V<sub>CE</sub></span>
+            <canvas
+              id="curves"
+              aria-label="Collector current vs collector-emitter voltage"
+            ></canvas>
+          </div>
+        </div>
+        <aside class="bjt-stats" aria-label="Operating point">
+          <span class="ctrl-label">operating point</span>
+          <div class="stats-list">
+            <div class="stat">
+              <span class="stat-label">I<sub>B</sub></span>
+              <span class="stat-value" id="Ib">—</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">I<sub>C</sub></span>
+              <span class="stat-value" id="Ic">—</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">V<sub>BE</sub></span>
+              <span class="stat-value" id="Vbe">—</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">V<sub>CE</sub></span>
+              <span class="stat-value" id="Vce">—</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">P<sub>diss</sub></span>
+              <span class="stat-value" id="power">—</span>
+            </div>
+            <div class="stat region" id="regionBadge">
+              <span class="region-label">region</span>
+              <span class="region-value" id="region">—</span>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="bjt-controls">
+        <div class="ctrl-row sliders">
+          <label class="row-control">
+            <span class="label-row">
+              <span>V<sub>BB</sub></span>
+              <span class="value" id="VbbValue">2.00 V</span>
+            </span>
+            <input
+              type="range"
+              id="Vbb"
+              min="0"
+              max="5"
+              step="0.05"
+              value="2"
+            />
+          </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>R<sub>B</sub></span>
+              <span class="value" id="RbValue">100 kΩ</span>
+            </span>
+            <input
+              type="range"
+              id="Rb"
+              min="0"
+              max="1"
+              step="0.001"
+              value="0.667"
+            />
+          </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>V<sub>CC</sub></span>
+              <span class="value" id="VccValue">12.0 V</span>
+            </span>
+            <input
+              type="range"
+              id="Vcc"
+              min="1"
+              max="20"
+              step="0.1"
+              value="12"
+            />
+          </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>R<sub>C</sub></span>
+              <span class="value" id="RcValue">2.2 kΩ</span>
+            </span>
+            <input
+              type="range"
+              id="Rc"
+              min="0"
+              max="1"
+              step="0.001"
+              value="0.448"
+            />
+          </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>β</span><span class="value" id="betaValue">150</span>
+            </span>
+            <input
+              type="range"
+              id="beta"
+              min="50"
+              max="500"
+              step="10"
+              value="150"
+            />
+          </label>
+        </div>
+      </section>
+
+      <section class="notes">
+        <h2>What you're looking at.</h2>
+        <p>
+          A single NPN in common-emitter configuration. The base is biased by
+          V<sub>BB</sub> through R<sub>B</sub>; the collector is loaded by
+          R<sub>C</sub> from V<sub>CC</sub>; the emitter sits on ground. KVL
+          around the input loop gives I<sub>B</sub> = (V<sub>BB</sub> −
+          V<sub>BE</sub>) / R<sub>B</sub>, and around the output loop
+          V<sub>CE</sub> = V<sub>CC</sub> − I<sub>C</sub>R<sub>C</sub> — the
+          equation of the DC load line drawn on the right.
+        </p>
+        <p>
+          Each gray curve on the right is one value of I<sub>B</sub>; the cobalt
+          curve is your actual I<sub>B</sub>. The operating point is the dot
+          where the active I<sub>B</sub> curve crosses the load line — that's
+          where the circuit settles. The three regions tell you what the
+          transistor is doing:
+        </p>
+        <ul>
+          <li>
+            <em>cutoff</em> — V<sub>BB</sub> &lt; V<sub>BE,on</sub>; the
+            base-emitter diode isn't forward biased, no I<sub>B</sub>, no
+            I<sub>C</sub>, and V<sub>CE</sub> = V<sub>CC</sub>. The transistor
+            is "off."
+          </li>
+          <li>
+            <em>active</em> — base diode on, collector hungry for current,
+            I<sub>C</sub> ≈ β · I<sub>B</sub>, with a slight upward slope from
+            the
+            <a
+              href="https://en.wikipedia.org/wiki/Early_effect"
+              target="_blank"
+              rel="noreferrer"
+              >Early effect</a
+            >. This is amplifier territory: a small change in I<sub>B</sub>
+            makes a much larger change in I<sub>C</sub>.
+          </li>
+          <li>
+            <em>saturation</em> — V<sub>CE</sub> drops to about 0.2 V and
+            stops; I<sub>C</sub> is now pinned at (V<sub>CC</sub> − 0.2) /
+            R<sub>C</sub> by the load line, and adding more I<sub>B</sub> does
+            nothing. This is switch territory: V<sub>CE</sub> ≈ 0 means the
+            "switch is closed."
+          </li>
+        </ul>
+        <p>
+          Try dragging V<sub>BB</sub> from 0 to 5 V slowly and watch the
+          operating point walk: cutoff at the bottom-right of the load line,
+          climbing through active up to the saturation knee at the top-left.
+          That walk <em>is</em> what a BJT does. Everything else — biasing
+          schemes, small-signal models, AC analysis — is layered on top.
+        </p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>© <span id="year">2026</span> Yashodhan Mohan Bhatnagar</span>
+      <span class="muted">Built quietly in Vadodara.</span>
+    </footer>
+
+    <script src="/lab/bjt/bjt.js" defer></script>
+  </body>
+</html>
