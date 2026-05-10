@@ -4,14 +4,17 @@
 (() => {
   // ---------- physics constants ----------
   const GRAVITY_Y = 900; // px / s²
-  const GRAVITY_X_MAX = 240; // px / s² applied at p = 1 (toward right wall)
-  const RESTITUTION = 0.45;
+  const GRAVITY_X_MAX = 360; // px / s² at the bias extremes
+  const RESTITUTION_PEG = 0.28; // ball-on-peg
+  const RESTITUTION_BALL = 0.35; // ball-on-ball
+  const RESTITUTION_WALL = 0.18; // ball-on-side-wall
+  const HORIZ_DAMPING = 0.965; // per frame (~60fps) — air-drag-ish
   const BALL_RADIUS = 4;
-  const PEG_RADIUS = 3;
-  const COLLISION_JITTER = 35; // px / s — broken-symmetry kick on each peg hit
-  const VX_CAP = 700;
-  const MAX_BALLS_IN_FLIGHT = 280;
-  const MAX_BALL_AGE = 8; // seconds before a stuck ball is force-binned
+  const PEG_RADIUS = 3.5;
+  const COLLISION_JITTER = 14; // px / s — broken-symmetry kick on each peg hit
+  const VX_CAP = 480;
+  const MAX_BALLS_IN_FLIGHT = 220;
+  const MAX_BALL_AGE = 9; // seconds before a stuck ball is force-binned
 
   // ---------- state ----------
   let rows = 10;
@@ -126,10 +129,15 @@
 
   function dropBall() {
     if (activeBalls.length >= MAX_BALLS_IN_FLIGHT) return;
+    // Don't spawn on top of an existing ball — keeps the spawn point from
+    // jamming when the rate slider is high.
+    for (const b of activeBalls) {
+      if (b.y < 24 && Math.abs(b.x - originX) < BALL_RADIUS * 2.2) return;
+    }
     activeBalls.push({
       x: originX + (Math.random() - 0.5) * 2,
       y: 6,
-      vx: (Math.random() - 0.5) * 16,
+      vx: (Math.random() - 0.5) * 12,
       vy: 0,
       age: 0,
     });
@@ -156,11 +164,17 @@
     const leftWall = 4;
     const rightWall = w - 4;
 
+    // Per-frame air drag — converts repeated 60fps integration to a smooth
+    // exponential decay of horizontal velocity. Without this, vx accumulates
+    // through the lattice and the histogram blows out toward the walls.
+    const dampingThisFrame = Math.pow(HORIZ_DAMPING, dt * 60);
+
     for (const ball of activeBalls) {
       ball.age += dt;
 
       ball.vx += gx * dt;
       ball.vy += GRAVITY_Y * dt;
+      ball.vx *= dampingThisFrame;
 
       if (ball.vx > VX_CAP) ball.vx = VX_CAP;
       else if (ball.vx < -VX_CAP) ball.vx = -VX_CAP;
@@ -168,7 +182,7 @@
       ball.x += ball.vx * dt;
       ball.y += ball.vy * dt;
 
-      // Peg collisions — only check pegs vertically near the ball.
+      // Peg collisions — vertically near the ball only.
       for (const peg of pegs) {
         if (Math.abs(ball.y - peg.y) > 14) continue;
         const ddx = ball.x - peg.x;
@@ -185,27 +199,63 @@
 
           const vDotN = ball.vx * nx + ball.vy * ny;
           if (vDotN < 0) {
-            ball.vx -= (1 + RESTITUTION) * vDotN * nx;
-            ball.vy -= (1 + RESTITUTION) * vDotN * ny;
-            // Symmetry-break kick — keeps perfectly vertical drops from
-            // sitting on top of a peg.
+            ball.vx -= (1 + RESTITUTION_PEG) * vDotN * nx;
+            ball.vy -= (1 + RESTITUTION_PEG) * vDotN * ny;
+            // Tiny symmetry-break — keeps a perfectly head-on drop from
+            // resting on top of a peg.
             ball.vx += (Math.random() - 0.5) * COLLISION_JITTER;
           }
         }
       }
 
-      // Side walls
+      // Side walls (mostly absorbing).
       if (ball.x < leftWall + BALL_RADIUS) {
         ball.x = leftWall + BALL_RADIUS;
-        ball.vx = Math.abs(ball.vx) * RESTITUTION;
+        ball.vx = Math.abs(ball.vx) * RESTITUTION_WALL;
       } else if (ball.x > rightWall - BALL_RADIUS) {
         ball.x = rightWall - BALL_RADIUS;
-        ball.vx = -Math.abs(ball.vx) * RESTITUTION;
+        ball.vx = -Math.abs(ball.vx) * RESTITUTION_WALL;
       }
 
-      // Reached the bin floor — settle
+      // Reached the bin floor — settle.
       if (ball.y > binsBottom - BALL_RADIUS - 1 || ball.age > MAX_BALL_AGE) {
         settle(ball);
+      }
+    }
+
+    // Ball-on-ball collisions (single Jacobi sweep, equal mass, mild
+    // restitution). Inner loop bails early on horizontal distance — most
+    // pairs are nowhere near each other.
+    const minBB = BALL_RADIUS * 2;
+    const minBBsq = minBB * minBB;
+    for (let i = 0; i < activeBalls.length; i++) {
+      const a = activeBalls[i];
+      if (a.dead) continue;
+      for (let j = i + 1; j < activeBalls.length; j++) {
+        const b = activeBalls[j];
+        if (b.dead) continue;
+        const dxij = b.x - a.x;
+        if (dxij > minBB || dxij < -minBB) continue;
+        const dyij = b.y - a.y;
+        if (dyij > minBB || dyij < -minBB) continue;
+        const distSq = dxij * dxij + dyij * dyij;
+        if (distSq >= minBBsq || distSq < 0.0001) continue;
+        const dist = Math.sqrt(distSq);
+        const nx = dxij / dist;
+        const ny = dyij / dist;
+        const overlap = (minBB - dist) * 0.5;
+        a.x -= nx * overlap;
+        a.y -= ny * overlap;
+        b.x += nx * overlap;
+        b.y += ny * overlap;
+        const relN = (b.vx - a.vx) * nx + (b.vy - a.vy) * ny;
+        if (relN < 0) {
+          const j_ = (1 + RESTITUTION_BALL) * relN * 0.5;
+          a.vx += j_ * nx;
+          a.vy += j_ * ny;
+          b.vx -= j_ * nx;
+          b.vy -= j_ * ny;
+        }
       }
     }
 
@@ -244,7 +294,7 @@
 
     const s = styles();
 
-    // Bin separators
+    // ---- bins frame ----
     ctx.strokeStyle = s.rule;
     ctx.lineWidth = 1;
     for (let i = 0; i <= rows + 1; i++) {
@@ -254,70 +304,82 @@
       ctx.lineTo(x, binsBottom);
       ctx.stroke();
     }
-    // Bin floor
     ctx.beginPath();
     ctx.moveTo(binsLeft, binsBottom);
     ctx.lineTo(binsLeft + (rows + 1) * dx, binsBottom);
     ctx.stroke();
 
-    // Pegs
-    ctx.fillStyle = s.inkSoft;
+    // ---- pegs (muted, distinct from balls) ----
+    ctx.fillStyle = s.muted;
     for (const peg of pegs) {
       ctx.beginPath();
       ctx.arc(peg.x, peg.y, PEG_RADIUS, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    // Histogram + theoretical curve
-    const binsHeight = binsBottom - binsTop;
-    const maxBin = Math.max(...bins, 1);
-    let maxTheory = 0;
-    if (totalDropped > 0) {
-      for (let k = 0; k <= rows; k++) {
-        const t = binomialPMF(rows, k, bias) * totalDropped;
-        if (t > maxTheory) maxTheory = t;
-      }
-    }
-    const scaleHeight = binsHeight * 0.92;
-    const scale = scaleHeight / Math.max(maxBin, maxTheory, 1);
+    // ---- bead piles in bins ----
+    // Beads are drawn at fixed pixel size and stacked. Theoretical curve
+    // is scaled to the same units (bead-pile heights), so empirical and
+    // theoretical are pixel-comparable.
+    const binPad = 2;
+    const beadSpacing = 7.6;
+    const beadRadius = 3.2;
+    const beadsPerRow = Math.max(
+      1,
+      Math.floor((dx - 2 * binPad) / beadSpacing)
+    );
+    const rowSpacing = beadSpacing * 0.92; // mild vertical compression
+    const binInteriorH = binsBottom - binsTop - binPad;
+    const maxRows = Math.max(1, Math.floor(binInteriorH / rowSpacing));
+    const maxVisibleBeads = beadsPerRow * maxRows;
 
-    // Bars
-    ctx.fillStyle = s.accent;
-    ctx.globalAlpha = 0.22;
+    ctx.fillStyle = s.inkSoft;
     for (let k = 0; k <= rows; k++) {
-      const x = binsLeft + k * dx + 1;
-      const barH = bins[k] * scale;
-      if (barH > 0) {
-        ctx.fillRect(x, binsBottom - barH, dx - 2, barH);
+      const visible = Math.min(bins[k], maxVisibleBeads);
+      if (visible === 0) continue;
+      const xLeft = binsLeft + k * dx;
+      const stripeWidth = beadsPerRow * beadSpacing;
+      const xOffset = (dx - stripeWidth) / 2 + beadSpacing / 2;
+      for (let i = 0; i < visible; i++) {
+        const r = Math.floor(i / beadsPerRow);
+        const c = i % beadsPerRow;
+        const cx = xLeft + xOffset + c * beadSpacing;
+        const cy = binsBottom - beadRadius - r * rowSpacing;
+        ctx.beginPath();
+        ctx.arc(cx, cy, beadRadius, 0, Math.PI * 2);
+        ctx.fill();
       }
     }
-    ctx.globalAlpha = 1;
 
-    // Theoretical curve
+    // ---- theoretical curve (scaled to match bead-pile heights) ----
     if (totalDropped > 0) {
+      const beadsToY = (count) =>
+        binsBottom - beadRadius - (count / beadsPerRow) * rowSpacing;
+
       ctx.strokeStyle = s.accent;
       ctx.lineWidth = 1.5;
       ctx.beginPath();
       for (let k = 0; k <= rows; k++) {
         const x = binsLeft + (k + 0.5) * dx;
-        const y = binsBottom - binomialPMF(rows, k, bias) * totalDropped * scale;
+        const tCount = binomialPMF(rows, k, bias) * totalDropped;
+        const y = beadsToY(tCount);
         if (k === 0) ctx.moveTo(x, y);
         else ctx.lineTo(x, y);
       }
       ctx.stroke();
 
-      // Dots at integer bins
       ctx.fillStyle = s.accent;
       for (let k = 0; k <= rows; k++) {
         const x = binsLeft + (k + 0.5) * dx;
-        const y = binsBottom - binomialPMF(rows, k, bias) * totalDropped * scale;
+        const tCount = binomialPMF(rows, k, bias) * totalDropped;
+        const y = beadsToY(tCount);
         ctx.beginPath();
-        ctx.arc(x, y, 2.5, 0, Math.PI * 2);
+        ctx.arc(x, y, 2.4, 0, Math.PI * 2);
         ctx.fill();
       }
     }
 
-    // Active balls
+    // ---- active balls ----
     ctx.fillStyle = s.ink;
     for (const ball of activeBalls) {
       ctx.beginPath();
