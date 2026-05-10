@@ -1,9 +1,45 @@
 /* Sine combinator — artifact-specific layout. Tokens come from /styles.css. */
 
 .combinator {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 240px;
+  gap: 2.5rem;
+  align-items: stretch;
+  margin: 0 0 2.5rem;
+}
+
+.combinator-main {
   display: flex;
   flex-direction: column;
-  margin: 0 0 2.5rem;
+  min-width: 0;
+}
+
+.spectrum-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-self: stretch;
+}
+.spectrum-panel .ctrl-label {
+  margin-right: 0;
+}
+.spectrum-canvas {
+  width: 100%;
+  flex: 1;
+  min-height: 380px;
+  display: block;
+}
+
+@media (max-width: 820px) {
+  .combinator {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+  .spectrum-canvas {
+    flex: none;
+    min-height: 0;
+    height: 260px;
+  }
 }
 
 .row,
@@ -42,14 +78,8 @@
   height: 110px;
 }
 
-.row-label {
-  width: 90px;
-  text-align: center;
-}
-.row-label .sigma {
-  font-family: var(--serif);
-  font-size: 1.6rem;
-  color: var(--accent-warm);
+.composite-stack {
+  /* Inherits .circle-canvas sizing; visual treatment comes from JS canvas drawing. */
 }
 
 /* Per-row controls span the full width below the canvases. */

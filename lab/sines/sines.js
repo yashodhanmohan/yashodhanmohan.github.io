@@ -54,6 +54,8 @@
   // DOM.
   const rowsEl = document.getElementById("rows");
   const compositeCanvas = document.getElementById("composite");
+  const compositeStackCanvas = document.getElementById("compositeStack");
+  const spectrumCanvas = document.getElementById("spectrum");
   const playPauseBtn = document.getElementById("playPause");
   const yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
@@ -153,7 +155,7 @@
 
   function sizeAllCanvases() {
     document
-      .querySelectorAll(".circle-canvas, .wave-canvas")
+      .querySelectorAll(".circle-canvas, .wave-canvas, .spectrum-canvas")
       .forEach(sizeCanvas);
   }
 
@@ -281,6 +283,183 @@
     ctx.fill();
   }
 
+  // ------- composite phasor stack -------
+
+  function drawCompositeStack(canvas, srcs) {
+    if (!canvas._w) return;
+    const dpr = canvas._dpr;
+    const ctx = canvas.getContext("2d");
+    const w = canvas._w;
+    const h = canvas._h;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+
+    const cx = w / 2;
+    const cy = h / 2;
+    const maxR = Math.min(w, h) / 2 - 6;
+    const s = styles();
+
+    // crosshair axes
+    ctx.strokeStyle = s.rule;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, cy);
+    ctx.lineTo(w, cy);
+    ctx.moveTo(cx, 0);
+    ctx.lineTo(cx, h);
+    ctx.stroke();
+
+    // pick a scale that keeps the chain inside the canvas at any time —
+    // worst case is total amplitude all in one direction.
+    const totalAmp = srcs.reduce((sum, s2) => sum + Math.abs(s2.amplitude), 0);
+    if (totalAmp < 0.001) return;
+    const scale = (maxR * 0.92) / totalAmp;
+
+    let x = cx;
+    let y = cy;
+    for (const src of srcs) {
+      if (src.amplitude < 0.001) continue;
+      const r = src.amplitude * scale;
+      const angle = TWO_PI * src.frequency * t + src.phase;
+      const nx = x + Math.cos(angle) * r;
+      const ny = y - Math.sin(angle) * r;
+
+      // faint ring
+      ctx.strokeStyle = s.rule;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, TWO_PI);
+      ctx.stroke();
+
+      // arm
+      ctx.strokeStyle = s.inkSoft;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(nx, ny);
+      ctx.stroke();
+
+      // tiny joint dot
+      ctx.fillStyle = s.inkSoft;
+      ctx.beginPath();
+      ctx.arc(x, y, 1.4, 0, TWO_PI);
+      ctx.fill();
+
+      x = nx;
+      y = ny;
+    }
+
+    // final endpoint
+    ctx.fillStyle = s.accent;
+    ctx.beginPath();
+    ctx.arc(x, y, 3.5, 0, TWO_PI);
+    ctx.fill();
+  }
+
+  // ------- spectrum -------
+
+  const SPECTRUM_F_MAX = 8;
+  const SPECTRUM_A_MAX = 2;
+  const SPECTRUM_FONT =
+    '10px ui-monospace, "JetBrains Mono", SFMono-Regular, Menlo, monospace';
+
+  function drawSpectrum(canvas, srcs) {
+    if (!canvas._w) return;
+    const dpr = canvas._dpr;
+    const ctx = canvas.getContext("2d");
+    const w = canvas._w;
+    const h = canvas._h;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+
+    const padL = 32;
+    const padR = 14;
+    const padT = 18;
+    const padB = 30;
+    const plotW = w - padL - padR;
+    const plotH = h - padT - padB;
+    const yAxis = h - padB;
+    const s = styles();
+
+    // axes
+    ctx.strokeStyle = s.rule;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(padL, yAxis);
+    ctx.lineTo(w - padR, yAxis);
+    ctx.moveTo(padL, padT);
+    ctx.lineTo(padL, yAxis);
+    ctx.stroke();
+
+    ctx.font = SPECTRUM_FONT;
+    ctx.fillStyle = s.muted;
+
+    // x ticks at integer Hz
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    for (let i = 0; i <= SPECTRUM_F_MAX; i++) {
+      const tx = padL + (i / SPECTRUM_F_MAX) * plotW;
+      ctx.beginPath();
+      ctx.moveTo(tx, yAxis);
+      ctx.lineTo(tx, yAxis + 4);
+      ctx.stroke();
+      if (i === 1 || i % 2 === 0) {
+        ctx.fillText(String(i), tx, yAxis + 7);
+      }
+    }
+
+    // y reference lines + labels at amplitude 1 and 2
+    ctx.textAlign = "right";
+    ctx.textBaseline = "middle";
+    for (const amp of [1, 2]) {
+      const ty = yAxis - (amp / SPECTRUM_A_MAX) * plotH;
+      ctx.setLineDash([2, 4]);
+      ctx.strokeStyle = s.rule;
+      ctx.beginPath();
+      ctx.moveTo(padL, ty);
+      ctx.lineTo(w - padR, ty);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = s.muted;
+      ctx.fillText(String(amp), padL - 6, ty);
+    }
+
+    // axis labels
+    ctx.fillStyle = s.muted;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "alphabetic";
+    ctx.fillText("Hz", padL + plotW / 2, h - 6);
+
+    ctx.save();
+    ctx.translate(11, padT + plotH / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("amplitude", 0, 0);
+    ctx.restore();
+
+    // stems
+    for (const src of srcs) {
+      if (src.amplitude < 0.001) continue;
+      const fx =
+        padL + Math.min(src.frequency / SPECTRUM_F_MAX, 1) * plotW;
+      const fy =
+        yAxis - (Math.min(src.amplitude, SPECTRUM_A_MAX) / SPECTRUM_A_MAX) * plotH;
+
+      ctx.strokeStyle = s.accent;
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.moveTo(fx, yAxis);
+      ctx.lineTo(fx, fy);
+      ctx.stroke();
+
+      ctx.fillStyle = s.accent;
+      ctx.beginPath();
+      ctx.arc(fx, fy, 3, 0, TWO_PI);
+      ctx.fill();
+    }
+  }
+
   // ------- main loop -------
 
   function frame(now) {
@@ -295,7 +474,9 @@
       drawCircle(circle, src);
       drawWave(wave, [src], false);
     });
+    drawCompositeStack(compositeStackCanvas, sources);
     drawWave(compositeCanvas, sources, true);
+    drawSpectrum(spectrumCanvas, sources);
 
     requestAnimationFrame(frame);
   }

@@ -53,15 +53,25 @@
       </p>
 
       <section class="combinator" aria-label="Sine combinator">
-        <div class="rows" id="rows"></div>
-        <div class="composite-row">
-          <div class="row-label"><span class="sigma">Σ</span></div>
-          <canvas
-            class="wave-canvas composite-wave"
-            id="composite"
-            aria-label="Composite waveform"
-          ></canvas>
+        <div class="combinator-main">
+          <div class="rows" id="rows"></div>
+          <div class="composite-row">
+            <canvas
+              class="circle-canvas composite-stack"
+              id="compositeStack"
+              aria-hidden="true"
+            ></canvas>
+            <canvas
+              class="wave-canvas composite-wave"
+              id="composite"
+              aria-label="Composite waveform"
+            ></canvas>
+          </div>
         </div>
+        <aside class="spectrum-panel" aria-label="Frequency spectrum">
+          <span class="ctrl-label">spectrum</span>
+          <canvas class="spectrum-canvas" id="spectrum"></canvas>
+        </aside>
       </section>
 
       <section class="combinator-controls">
@@ -88,12 +98,22 @@
           starting angle is the phase.
         </p>
         <p>
-          Add sines together and the bottom row becomes their sum. Stack the
-          right harmonics and recognizable shapes appear — a square wave
+          The bottom row sums all four sources. The little glyph on the left
+          isn't a sigma — it's the four circles connected tip-to-tail. Each
+          phasor pivots on the previous one's endpoint, and the final dot's
+          height is the value of the composite wave at this instant. Stack the
+          right harmonics and recognizable shapes appear: a square wave
           assembles itself from odd harmonics with amplitudes 4 / (πn); a
           sawtooth uses every harmonic with alternating signs; a triangle uses
           odd harmonics with a 1 / n² falloff. Fewer than infinite harmonics is
-          why the corners ring; that's the Gibbs phenomenon.
+          why the corners ring — that's the Gibbs phenomenon.
+        </p>
+        <p>
+          The panel on the right is the same signal in the frequency domain —
+          a stem for each source plotted at its frequency, with height equal
+          to its amplitude. A pure sine is a single stem; a square wave is a
+          neat ladder of stems at 1, 3, 5, 7 Hz. Time domain and frequency
+          domain are the same information, looked at from two sides.
         </p>
       </section>
     </main>
