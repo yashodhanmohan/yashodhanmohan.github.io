@@ -10,7 +10,7 @@
 
 .bjt-main {
   display: grid;
-  grid-template-columns: 260px minmax(0, 1fr);
+  grid-template-columns: 320px minmax(0, 1fr);
   gap: 1.5rem;
   min-width: 0;
 }
@@ -27,12 +27,13 @@
   display: block;
 }
 .bjt-schematic canvas {
-  height: 460px;
+  height: 540px;
+  cursor: crosshair;
 }
 .bjt-curves canvas {
   aspect-ratio: 5 / 4;
   height: auto;
-  max-height: 460px;
+  max-height: 540px;
 }
 
 .ctrl-label {
@@ -123,7 +124,7 @@
     gap: 1.75rem;
   }
   .bjt-main {
-    grid-template-columns: 240px minmax(0, 1fr);
+    grid-template-columns: 300px minmax(0, 1fr);
   }
   .stats-list {
     flex-direction: row;
@@ -141,7 +142,7 @@
     grid-template-columns: 1fr;
   }
   .bjt-schematic canvas {
-    max-width: 280px;
+    max-width: 320px;
     margin: 0 auto;
   }
 }
