@@ -4,14 +4,10 @@
 (() => {
   const TWO_PI = Math.PI * 2;
   const T_WINDOW = 4; // seconds shown across each waveform
-  const N = 4; // number of source oscillators
+  const MAX_SOURCES = 8;
 
-  // Mutable state.
-  const sources = Array.from({ length: N }, (_, i) => ({
-    amplitude: i === 0 ? 1 : 0,
-    frequency: i + 1,
-    phase: 0,
-  }));
+  // Mutable state — populated by applyPreset('sine') at boot.
+  const sources = [];
 
   let t = 0;
   let lastFrame = 0;
@@ -62,7 +58,9 @@
 
   // ------- build rows -------
 
-  function buildRows() {
+  function rebuildRows() {
+    rowsEl.innerHTML = "";
+
     sources.forEach((src, i) => {
       const row = document.createElement("div");
       row.className = "row";
@@ -75,11 +73,17 @@
 
       const wave = document.createElement("canvas");
       wave.className = "wave-canvas";
-      wave.setAttribute(
-        "aria-label",
-        `Waveform of source ${i + 1}`
-      );
+      wave.setAttribute("aria-label", `Waveform of source ${i + 1}`);
       row.appendChild(wave);
+
+      const remove = document.createElement("button");
+      remove.className = "row-remove";
+      remove.type = "button";
+      remove.setAttribute("aria-label", `Remove source ${i + 1}`);
+      remove.textContent = "×";
+      remove.disabled = sources.length <= 1;
+      remove.addEventListener("click", () => removeSource(i));
+      row.appendChild(remove);
 
       const ctrls = document.createElement("div");
       ctrls.className = "row-controls";
@@ -118,6 +122,15 @@
 
       updateValueDisplays(row, src);
     });
+
+    if (sources.length < MAX_SOURCES) {
+      const add = document.createElement("button");
+      add.className = "add-source";
+      add.type = "button";
+      add.textContent = `+ add sine  (${sources.length}/${MAX_SOURCES})`;
+      add.addEventListener("click", addSource);
+      rowsEl.appendChild(add);
+    }
   }
 
   function updateValueDisplays(row, src) {
@@ -130,14 +143,22 @@
     setDisplay("phase", (src.phase / Math.PI).toFixed(2) + "π");
   }
 
-  function syncControls() {
-    rowsEl.querySelectorAll(".row").forEach((row, i) => {
-      const src = sources[i];
-      row.querySelectorAll('input[type="range"]').forEach((input) => {
-        input.value = src[input.dataset.param];
-      });
-      updateValueDisplays(row, src);
-    });
+  function addSource() {
+    if (sources.length >= MAX_SOURCES) return;
+    const last = sources[sources.length - 1];
+    const nextF = last ? Math.min(8, +(last.frequency + 1).toFixed(2)) : 1;
+    sources.push({ amplitude: 0, frequency: nextF, phase: 0 });
+    rebuildRows();
+    clearActivePreset();
+    requestAnimationFrame(sizeAllCanvases);
+  }
+
+  function removeSource(i) {
+    if (sources.length <= 1) return;
+    sources.splice(i, 1);
+    rebuildRows();
+    clearActivePreset();
+    requestAnimationFrame(sizeAllCanvases);
   }
 
   // ------- canvas sizing -------
@@ -486,10 +507,10 @@
   function applyPreset(name) {
     const preset = presets[name];
     if (!preset) return;
-    preset.forEach((p, i) => {
-      sources[i] = { ...p };
-    });
-    syncControls();
+    sources.length = 0;
+    preset.forEach((p) => sources.push({ ...p }));
+    rebuildRows();
+    requestAnimationFrame(sizeAllCanvases);
 
     document
       .querySelectorAll('.combinator-controls button[data-preset]')
@@ -521,8 +542,7 @@
 
   // ------- boot -------
 
-  buildRows();
-  applyPreset("sine");
+  applyPreset("sine"); // populates sources and builds rows
 
   // Wait for fonts/layout before sizing canvases.
   requestAnimationFrame(() => {
