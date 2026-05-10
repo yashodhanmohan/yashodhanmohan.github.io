@@ -3,20 +3,301 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Yashodhan Mohan Bhatnagar</title>
+    <title>Yashodhan Mohan Bhatnagar — Engineer</title>
+    <meta
+      name="description"
+      content="Engineer. Head of Engineering at Superr. Previously at Lyearn and Amazon."
+    />
+    <meta name="color-scheme" content="light dark" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main>
-      <h1>Yashodhan Mohan Bhatnagar</h1>
-      <p class="tagline">Software engineer.</p>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="orb orb-a" aria-hidden="true"></div>
+    <div class="orb orb-b" aria-hidden="true"></div>
 
-      <section>
-        <h2>Links</h2>
-        <ul>
-          <li><a href="https://github.com/yashodhanmohan">GitHub</a></li>
-        </ul>
+    <header class="topbar">
+      <span class="mark">YMB</span>
+      <span class="status">
+        <span class="dot"></span>
+        Mumbai · open to conversations
+      </span>
+    </header>
+
+    <main>
+      <section class="hero" aria-label="Introduction">
+        <h1 class="name">
+          <span class="name-line" style="--i: 0">Yashodhan<span class="dot-end">.</span></span>
+          <span class="name-line" style="--i: 1">Mohan</span>
+          <span class="name-line" style="--i: 2">Bhatnagar</span>
+        </h1>
+        <p class="lede">
+          <em>—</em> engineer, currently leading engineering at
+          <a href="https://superr.in" target="_blank" rel="noreferrer">Superr</a>.
+          Previously at <span class="muted">Lyearn</span> and <span class="muted">Amazon</span>.
+        </p>
+        <nav class="quicknav">
+          <a href="#about">about</a>
+          <span aria-hidden="true">·</span>
+          <a href="#work">work</a>
+          <span aria-hidden="true">·</span>
+          <a href="#projects">selected</a>
+          <span aria-hidden="true">·</span>
+          <a href="#writing">writing</a>
+          <span aria-hidden="true">·</span>
+          <a href="#contact">contact</a>
+        </nav>
+      </section>
+
+      <section id="about" class="section reveal" aria-labelledby="about-h">
+        <div class="section-label">
+          <span class="num">01</span>
+          <span class="label">About</span>
+        </div>
+        <div class="section-body about">
+          <h2 id="about-h" class="section-title">A short introduction.</h2>
+          <p>
+            I'm an engineer who's spent the last decade building on the internet — equally at
+            home with old-school Java (Spring, Tomcat) and the newer
+            JavaScript/TypeScript stack (MEAN, React). I tend to gravitate toward problems
+            that sit at the seam between systems: realtime collaboration, infrastructure
+            that has to behave under stress, platforms that other teams build on top of.
+          </p>
+          <p>
+            B.Tech. (Honours) in Information & Communication Technology with a minor in
+            Computational Sciences from
+            <span class="muted">DA-IICT</span>. Research roots in high-performance
+            computing and system modelling — those instincts still show up in how I think
+            about software at scale.
+          </p>
+        </div>
+      </section>
+
+      <section id="work" class="section reveal" aria-labelledby="work-h">
+        <div class="section-label">
+          <span class="num">02</span>
+          <span class="label">Work</span>
+        </div>
+        <div class="section-body">
+          <h2 id="work-h" class="section-title">Where I've been.</h2>
+          <ol class="timeline">
+            <li>
+              <span class="years">2024 — now</span>
+              <div>
+                <h3>Head of Engineering</h3>
+                <p class="org">Superr · Mumbai</p>
+              </div>
+            </li>
+            <li>
+              <span class="years">2020 — 2023</span>
+              <div>
+                <h3>Product Engineer IV</h3>
+                <p class="org">Lyearn · Gandhinagar</p>
+              </div>
+            </li>
+            <li>
+              <span class="years">2019 — 2020</span>
+              <div>
+                <h3>Software Development Engineer II</h3>
+                <p class="org">Amazon · Bengaluru</p>
+              </div>
+            </li>
+            <li>
+              <span class="years">2017 — 2019</span>
+              <div>
+                <h3>Software Development Engineer</h3>
+                <p class="org">Amazon · Bengaluru</p>
+              </div>
+            </li>
+            <li>
+              <span class="years">2017</span>
+              <div>
+                <h3>Data Science Intern · Teaching Assistant</h3>
+                <p class="org">Playpower · DA-IICT · Gandhinagar</p>
+              </div>
+            </li>
+            <li>
+              <span class="years">2016</span>
+              <div>
+                <h3>SDE Intern</h3>
+                <p class="org">Amazon · Bengaluru</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="projects" class="section reveal" aria-labelledby="projects-h">
+        <div class="section-label">
+          <span class="num">03</span>
+          <span class="label">Selected</span>
+        </div>
+        <div class="section-body">
+          <h2 id="projects-h" class="section-title">A few things worth pointing at.</h2>
+          <ul class="projects">
+            <li>
+              <h3>Realtime collaborative editor</h3>
+              <p class="meta">Lyearn · backend lead</p>
+              <p>
+                Designed and led a Yjs-backed CRDT block editor with optimal,
+                no-latency saves and tightly bounded DB writes. Built the block
+                primitives as an extensible ecosystem so other product surfaces could
+                build on top.
+              </p>
+            </li>
+            <li>
+              <h3>Low-bandwidth video conferencing</h3>
+              <p class="meta">Lyearn · platform</p>
+              <p>
+                Forked and customized Jitsi on a self-built Kubernetes cluster, tuned
+                for the realities of Indian networks — encoding, delivery, and WebRTC
+                paths reshaped to keep calls usable on thin pipes.
+              </p>
+            </li>
+            <li>
+              <h3>GCP landing zone in Terraform</h3>
+              <p class="meta">Lyearn · infrastructure</p>
+              <p>
+                Built a shared-VPC, air-gapped landing zone with east-west traffic
+                through GCP and third-party firewalls. Networking, storage,
+                containers, IAM — all codified, all reviewable.
+              </p>
+            </li>
+            <li>
+              <h3>Zero-downtime cluster split</h3>
+              <p class="meta">Lyearn · infrastructure</p>
+              <p>
+                Separated a shared dev/prod Kubernetes cluster into independent
+                region-based clusters with no user-visible or developer-visible
+                disruption. Planned the failure modes before the migration, not
+                during.
+              </p>
+            </li>
+            <li>
+              <h3>Product Detail Page, at Amazon scale</h3>
+              <p class="meta">Amazon · core platform</p>
+              <p>
+                Core team behind one of the internet's heaviest pages. JVM and
+                metaspace optimizations across 1000+ server fleets translated to
+                multi-million-dollar savings; vended APIs and contracts to 100+
+                partner teams.
+              </p>
+            </li>
+            <li>
+              <h3>Let's HPC</h3>
+              <p class="meta">Research · 2018</p>
+              <p>
+                Co-author of a
+                <a
+                  href="https://www.letshpc.org"
+                  target="_blank"
+                  rel="noreferrer"
+                  >web platform</a
+                >
+                for parallel and high-performance computing education, published in
+                the <em>Journal of Parallel and Distributed Computing</em>.
+              </p>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="writing" class="section reveal" aria-labelledby="writing-h">
+        <div class="section-label">
+          <span class="num">04</span>
+          <span class="label">Writing</span>
+        </div>
+        <div class="section-body">
+          <h2 id="writing-h" class="section-title">Words.</h2>
+          <ul class="writing">
+            <li>
+              <span class="years">ongoing</span>
+              <div>
+                <h3>
+                  <a
+                    href="https://medium.com/@yashodhanmohan"
+                    target="_blank"
+                    rel="noreferrer"
+                    >Notes on Medium</a
+                  >
+                </h3>
+                <p class="meta">
+                  Field notes on engineering, infrastructure, and the occasional
+                  detour.
+                </p>
+              </div>
+            </li>
+            <li>
+              <span class="years">2018</span>
+              <div>
+                <h3>
+                  <a
+                    href="https://www.letshpc.org"
+                    target="_blank"
+                    rel="noreferrer"
+                    >Let's HPC: a web platform to aid parallel, distributed and
+                    high-performance computing education</a
+                  >
+                </h3>
+                <p class="meta">
+                  Journal of Parallel and Distributed Computing
+                </p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="contact" class="section reveal" aria-labelledby="contact-h">
+        <div class="section-label">
+          <span class="num">05</span>
+          <span class="label">Contact</span>
+        </div>
+        <div class="section-body">
+          <h2 id="contact-h" class="section-title">Say hello.</h2>
+          <ul class="contact">
+            <li>
+              <a
+                href="https://github.com/yashodhanmohan"
+                target="_blank"
+                rel="noreferrer"
+                >GitHub <span aria-hidden="true">↗</span></a
+              >
+            </li>
+            <li>
+              <a
+                href="https://www.linkedin.com/in/yashodhan-mohan-bhatnagar/"
+                target="_blank"
+                rel="noreferrer"
+                >LinkedIn <span aria-hidden="true">↗</span></a
+              >
+            </li>
+            <li>
+              <a
+                href="https://medium.com/@yashodhanmohan"
+                target="_blank"
+                rel="noreferrer"
+                >Medium <span aria-hidden="true">↗</span></a
+              >
+            </li>
+          </ul>
+        </div>
       </section>
     </main>
+
+    <footer class="footer">
+      <span>© <span id="year">2026</span> Yashodhan Mohan Bhatnagar</span>
+      <span class="muted">Built quietly in Mumbai.</span>
+    </footer>
+
+    <script src="script.js"></script>
   </body>
 </html>
