@@ -21,10 +21,9 @@ if (!reduceMotion && "IntersectionObserver" in window) {
   document.querySelectorAll(".reveal").forEach((el) => el.classList.add("visible"));
 }
 
-// Gentle parallax for the orbs — pointer-driven, very subtle.
+// Gentle parallax for the orb — pointer-driven, very subtle.
 if (!reduceMotion) {
   const orbA = document.querySelector(".orb-a");
-  const orbB = document.querySelector(".orb-b");
   let raf = 0;
   let tx = 0;
   let ty = 0;
@@ -42,6 +41,5 @@ if (!reduceMotion) {
   function apply() {
     raf = 0;
     if (orbA) orbA.style.translate = `${tx * -18}px ${ty * -18}px`;
-    if (orbB) orbB.style.translate = `${tx * 22}px ${ty * 22}px`;
   }
 }
