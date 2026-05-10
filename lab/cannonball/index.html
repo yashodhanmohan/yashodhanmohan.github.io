@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Newton's cannonball — Lab</title>
+    <meta
+      name="description"
+      content="Fire a cannon from Earth's surface under inverse-square gravity. Watch parabolic lobs become circular orbits, ellipses, and hyperbolic escapes."
+    />
+    <meta name="color-scheme" content="light dark" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/lab/lab.css" />
+    <link rel="stylesheet" href="/lab/cannonball/cannonball.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="orb orb-a" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <a class="mark" href="/">YMB</a>
+      <span class="status">
+        <span class="dot"></span>
+        Vadodara · IST
+      </span>
+    </header>
+
+    <main class="artifact">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/">portfolio</a>
+        <span aria-hidden="true">›</span>
+        <a href="/lab/">lab</a>
+        <span aria-hidden="true">›</span>
+        <span>cannonball</span>
+      </nav>
+
+      <h1 class="artifact-title">
+        Newton's cannonball<span class="end-dot">.</span>
+      </h1>
+      <p class="artifact-lede">
+        A toy for
+        <a
+          href="https://en.wikipedia.org/wiki/Newton%27s_cannonball"
+          target="_blank"
+          rel="noreferrer"
+          >Newton's cannonball</a
+        >. A cannon mounted on Earth's surface fires under inverse-square
+        gravity, and the same equation produces every shape you'd see in nature.
+        Turn the <em>speed</em> knob and watch a parabolic-looking lob become a
+        circular orbit, then an ellipse, then a
+        <a
+          href="https://en.wikipedia.org/wiki/Hyperbolic_trajectory"
+          target="_blank"
+          rel="noreferrer"
+          >hyperbolic</a
+        >
+        escape. The trajectory is always a
+        <a
+          href="https://en.wikipedia.org/wiki/Conic_section"
+          target="_blank"
+          rel="noreferrer"
+          >conic section</a
+        >; which one you get depends on whether the launch energy sits below,
+        at, or above the
+        <a
+          href="https://en.wikipedia.org/wiki/Escape_velocity"
+          target="_blank"
+          rel="noreferrer"
+          >escape velocity</a
+        >.
+      </p>
+
+      <section class="cannonball" aria-label="Cannonball">
+        <div class="cannonball-board">
+          <canvas
+            id="board"
+            aria-label="Cannonball trajectories around Earth"
+          ></canvas>
+        </div>
+        <aside class="cannonball-stats" aria-label="Last shot statistics">
+          <span class="ctrl-label">last shot</span>
+          <div class="stats-list">
+            <div class="stat">
+              <span class="stat-label">speed</span>
+              <span class="stat-value" id="speedDisplay">—</span>
+              <span class="stat-theory" id="speedSub">—</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">trajectory</span>
+              <span class="stat-value" id="trajType">—</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">apogee</span>
+              <span class="stat-value" id="apogee">—</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">perigee</span>
+              <span class="stat-value" id="perigee">—</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">eccentricity</span>
+              <span class="stat-value" id="eccentricity">—</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">period</span>
+              <span class="stat-value" id="period">—</span>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="cannonball-controls">
+        <div class="ctrl-row sliders">
+          <label class="row-control">
+            <span class="label-row">
+              <span>speed</span>
+              <span class="value" id="speedValue">0.70 v<sub>c</sub></span>
+            </span>
+            <input
+              type="range"
+              id="speed"
+              min="0.05"
+              max="2"
+              step="0.01"
+              value="0.7"
+            />
+          </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>angle</span><span class="value" id="angleValue">0°</span>
+            </span>
+            <input
+              type="range"
+              id="angle"
+              min="0"
+              max="90"
+              step="1"
+              value="0"
+            />
+          </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>cannon position</span>
+              <span class="value" id="cannonValue">90°</span>
+            </span>
+            <input
+              type="range"
+              id="cannonPos"
+              min="0"
+              max="359"
+              step="1"
+              value="90"
+            />
+          </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>zoom</span>
+              <span class="value" id="zoomValue">1.00×</span>
+            </span>
+            <input
+              type="range"
+              id="zoom"
+              min="0.25"
+              max="2.5"
+              step="0.05"
+              value="1"
+            />
+          </label>
+        </div>
+        <div class="ctrl-row buttons">
+          <button id="fire" type="button">fire</button>
+          <button id="clear" type="button">clear trails</button>
+          <button id="pausePlay" type="button">pause</button>
+        </div>
+      </section>
+
+      <section class="notes">
+        <h2>What you're looking at.</h2>
+        <p>
+          Newton's insight in the <em>Principia</em> was that the gravity that
+          pulls an apple to the ground is the same gravity that holds the moon
+          in orbit. A stone thrown slowly traces an arc and crashes; thrown
+          faster — fast enough that the curve of its fall matches the curve of
+          the Earth — it never crashes, it orbits. There is no separate
+          "celestial mechanics." It's one equation, sliced at different
+          speeds.
+        </p>
+        <p>
+          Below circular speed (<em>v</em><sub>circ</sub>) the orbit is an
+          ellipse whose perigee dips below the surface — so the ball crashes
+          back. Exactly at <em>v</em><sub>circ</sub> with a horizontal launch,
+          the ellipse becomes a circle. Between <em>v</em><sub>circ</sub> and
+          <em>v</em><sub>esc</sub> = √2 · <em>v</em><sub>circ</sub>, the orbit
+          stays closed but elongates. Above <em>v</em><sub>esc</sub> the
+          trajectory opens into a hyperbola and the ball never returns. Every
+          shape — parabola-ish lob, circle, ellipse, hyperbola — is a slice of
+          a cone.
+        </p>
+        <p>
+          The simulation uses unit-system gravity (<em>GM</em> = 1, Earth's
+          radius = 1) so <em>v</em><sub>circ</sub> = 1 and
+          <em>v</em><sub>esc</sub> = √2 ≈ 1.414. Trail style encodes the type:
+          a thin muted line for sub-orbital lobs, a solid cobalt curve for
+          closed orbits, a dashed cobalt line for hyperbolic escape. Multiple
+          shots accumulate so you can compare regimes side-by-side; clear
+          trails resets the canvas.
+        </p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>© <span id="year">2026</span> Yashodhan Mohan Bhatnagar</span>
+      <span class="muted">Built quietly in Vadodara.</span>
+    </footer>
+
+    <script src="/lab/cannonball/cannonball.js" defer></script>
+  </body>
+</html>
