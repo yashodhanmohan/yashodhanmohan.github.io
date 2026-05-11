@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gas processes — Lab</title>
+    <meta
+      name="description"
+      content="An ideal gas you can drag around the PV diagram. Isothermal, adiabatic, isobaric, isochoric. Build a Carnot cycle by hand."
+    />
+    <meta name="color-scheme" content="light dark" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/lab/lab.css" />
+    <link rel="stylesheet" href="/lab/gas/gas.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="orb orb-a" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <a class="mark" href="/">YMB</a>
+      <span class="status">
+        <span class="dot"></span>
+        Vadodara · IST
+      </span>
+    </header>
+
+    <main class="artifact">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/">portfolio</a>
+        <span aria-hidden="true">›</span>
+        <a href="/lab/">lab</a>
+        <span aria-hidden="true">›</span>
+        <span>gas</span>
+      </nav>
+
+      <h1 class="artifact-title">
+        Gas processes<span class="end-dot">.</span>
+      </h1>
+      <p class="artifact-lede">
+        A toy for the four canonical
+        <a
+          href="https://en.wikipedia.org/wiki/Ideal_gas_law"
+          target="_blank"
+          rel="noreferrer"
+          >ideal gas</a
+        >
+        processes. The piston-cylinder on the right has about fifty little
+        molecules; the PV diagram on the left has a single state point you can
+        drag. Pick a process —
+        <a
+          href="https://en.wikipedia.org/wiki/Isothermal_process"
+          target="_blank"
+          rel="noreferrer"
+          >isothermal</a
+        >,
+        <a
+          href="https://en.wikipedia.org/wiki/Adiabatic_process"
+          target="_blank"
+          rel="noreferrer"
+          >adiabatic</a
+        >,
+        <a
+          href="https://en.wikipedia.org/wiki/Isobaric_process"
+          target="_blank"
+          rel="noreferrer"
+          >isobaric</a
+        >, or
+        <a
+          href="https://en.wikipedia.org/wiki/Isochoric_process"
+          target="_blank"
+          rel="noreferrer"
+          >isochoric</a
+        >
+        — and the point stays glued to the corresponding constraint curve as
+        you drag. The molecules animate to match: adiabatic compression visibly
+        <em>speeds them up</em>, because the work you do on the gas with no
+        heat exchange goes into kinetic energy. Build a
+        <a
+          href="https://en.wikipedia.org/wiki/Carnot_cycle"
+          target="_blank"
+          rel="noreferrer"
+          >Carnot cycle</a
+        >
+        by alternating two isotherms and two adiabats; the closed loop appears
+        as your trail and the area inside is the net work.
+      </p>
+
+      <section class="gas" aria-label="Gas processes">
+        <div class="gas-main">
+          <div class="gas-pv">
+            <span class="ctrl-label">PV diagram <em>· drag the dot</em></span>
+            <canvas
+              id="pv"
+              aria-label="Pressure-volume diagram with draggable state point"
+            ></canvas>
+          </div>
+          <div class="gas-cylinder">
+            <span class="ctrl-label">cylinder</span>
+            <canvas
+              id="cylinder"
+              aria-label="Piston cylinder with molecules"
+            ></canvas>
+          </div>
+        </div>
+        <aside class="gas-stats" aria-label="State and energy">
+          <span class="ctrl-label">state</span>
+          <div class="stats-list">
+            <div class="stat">
+              <span class="stat-label">P</span>
+              <span class="stat-value" id="pDisplay">—</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">V</span>
+              <span class="stat-value" id="vDisplay">—</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">T</span>
+              <span class="stat-value" id="tDisplay">—</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">ΔU (since reset)</span>
+              <span class="stat-value" id="uDisplay">0 J</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">W done by gas</span>
+              <span class="stat-value" id="wDisplay">0 J</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Q absorbed</span>
+              <span class="stat-value" id="qDisplay">0 J</span>
+            </div>
+            <div class="stat process-badge" id="processBadge">
+              <span class="region-label">process</span>
+              <span class="region-value" id="processName">isothermal</span>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="gas-controls">
+        <div class="ctrl-row buttons">
+          <span class="ctrl-label">process</span>
+          <button data-process="isothermal" class="active">isothermal</button>
+          <button data-process="adiabatic">adiabatic</button>
+          <button data-process="isobaric">isobaric</button>
+          <button data-process="isochoric">isochoric</button>
+        </div>
+        <div class="ctrl-row buttons">
+          <span class="ctrl-label">γ</span>
+          <button data-gamma="1.6667">5/3 monatomic</button>
+          <button data-gamma="1.4" class="active">7/5 diatomic</button>
+        </div>
+        <div class="ctrl-row buttons">
+          <button id="reset">reset</button>
+          <button id="clearTrail">clear trail</button>
+        </div>
+      </section>
+
+      <section class="notes">
+        <h2>What you're looking at.</h2>
+        <p>
+          The state of an ideal gas lives in three numbers: P, V, T — and the
+          ideal gas law <em>PV = nRT</em> pins any two given the third. A
+          <em>process</em> is a path through this three-dimensional space; the
+          four canonical ones each hold one quantity fixed: isothermal (T
+          fixed), isobaric (P fixed), isochoric (V fixed), adiabatic (Q = 0, no
+          heat in or out — the gas heats up under compression and cools under
+          expansion).
+        </p>
+        <p>
+          Energy is bookkept by the
+          <a
+            href="https://en.wikipedia.org/wiki/First_law_of_thermodynamics"
+            target="_blank"
+            rel="noreferrer"
+            >first law</a
+          >: <em>ΔU = Q − W</em>, where W is the work done <em>by</em> the gas
+          (positive on expansion) and Q is heat absorbed <em>by</em> the gas
+          (positive in). The stats panel tracks all three since the last reset.
+          On a closed cycle ΔU returns to zero; W and Q can sum to nonzero —
+          the area enclosed by the loop on the PV diagram <em>is</em> the net
+          work.
+        </p>
+        <p>
+          Try this: pick a low-V, high-P starting point with isothermal
+          expansion; switch to adiabatic expansion; switch to isothermal
+          compression at the lower temperature; switch to adiabatic compression
+          back to start. That's a Carnot cycle, and the closed loop is your
+          engine's signature.
+        </p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>© <span id="year">2026</span> Yashodhan Mohan Bhatnagar</span>
+      <span class="muted">Built quietly in Vadodara.</span>
+    </footer>
+
+    <script src="/lab/gas/gas.js" defer></script>
+  </body>
+</html>
