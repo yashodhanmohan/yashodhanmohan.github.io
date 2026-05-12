@@ -54,6 +54,11 @@
   color: var(--ink);
 }
 
+/* Tint the live block so it reads as the "currently happening" column. */
+.stats-block.live-block .stat-val {
+  color: var(--accent-warm);
+}
+
 .type-badge {
   border: 1px solid var(--accent-warm);
   border-radius: 6px;
@@ -207,6 +212,91 @@ input[type="range"]:hover::-webkit-slider-thumb {
 .collisions-controls button#fire:hover {
   background: var(--accent-warm);
   color: var(--bg);
+}
+
+/* walls section */
+
+.walls-section {
+  margin: 1.25rem 0 0;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rule);
+}
+.walls-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+.walls-header button {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  padding: 0.4rem 0.95rem;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+  border-radius: 999px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  transition: color 0.2s, border-color 0.2s;
+}
+.walls-header button:hover {
+  color: var(--accent-warm);
+  border-color: var(--accent-warm);
+}
+.walls-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.wall-row {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr) 5rem 2rem;
+  align-items: center;
+  gap: 0.85rem;
+}
+.wall-row .wall-label {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+.wall-row .wall-pos {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  font-feature-settings: "tnum" 1;
+  text-align: right;
+}
+.wall-row .wall-remove {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+}
+.wall-row .wall-remove:hover {
+  color: var(--accent-warm);
+}
+.walls-empty {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.92rem;
+  color: var(--muted);
+  margin: 0;
+  max-width: 60ch;
+}
+.walls-empty.hidden {
+  display: none;
 }
 
 /* notes */

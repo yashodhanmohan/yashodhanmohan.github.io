@@ -129,7 +129,7 @@
         <div class="collisions-board">
           <canvas id="board" aria-label="Two balls on a 1D track"></canvas>
         </div>
-        <aside class="collisions-stats" aria-label="Before / after">
+        <aside class="collisions-stats" aria-label="Before / live / next">
           <div class="stats-block">
             <span class="ctrl-label">before</span>
             <div class="stat-row">
@@ -150,8 +150,28 @@
             </div>
           </div>
 
+          <div class="stats-block live-block">
+            <span class="ctrl-label">live</span>
+            <div class="stat-row">
+              <span class="stat-key">v₁</span>
+              <span class="stat-val" id="v1Live">—</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-key">v₂</span>
+              <span class="stat-val" id="v2Live">—</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-key">p</span>
+              <span class="stat-val" id="pLive">—</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-key">KE</span>
+              <span class="stat-val" id="keLive">—</span>
+            </div>
+          </div>
+
           <div class="stats-block">
-            <span class="ctrl-label">after</span>
+            <span class="ctrl-label">next collision</span>
             <div class="stat-row">
               <span class="stat-key">v₁′</span>
               <span class="stat-val" id="v1After">—</span>
@@ -253,11 +273,37 @@
               value="1"
             />
           </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>zoom</span>
+              <span class="value" id="zoomValue">1.00×</span>
+            </span>
+            <input
+              type="range"
+              id="zoom"
+              min="0.4"
+              max="2.5"
+              step="0.05"
+              value="1"
+            />
+          </label>
         </div>
         <div class="ctrl-row buttons">
           <button id="fire" type="button">fire</button>
           <button id="reset" type="button">reset</button>
         </div>
+      </section>
+
+      <section class="walls-section" aria-label="Walls">
+        <div class="walls-header">
+          <span class="ctrl-label">walls</span>
+          <button id="addWall" type="button">+ add wall</button>
+        </div>
+        <ol class="walls-list" id="wallsList" aria-label="Wall list"></ol>
+        <p class="walls-empty" id="wallsEmpty">
+          No walls. Add one to bounce balls off it; walls share the same
+          coefficient of restitution as ball-on-ball collisions.
+        </p>
       </section>
 
       <section class="notes">
