@@ -40,41 +40,48 @@
   list-style: none;
   margin: 0;
   padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
 }
-.lab-list li {
-  border-top: 1px solid var(--rule);
+
+@media (min-width: 640px) {
+  .lab-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.75rem 2rem;
+  }
 }
-.lab-list li:last-child {
-  border-bottom: 1px solid var(--rule);
+
+@media (min-width: 1000px) {
+  .lab-list {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem 2.25rem;
+  }
 }
 
 .lab-card {
-  display: grid;
-  grid-template-columns: 3rem 1fr auto;
-  align-items: baseline;
-  column-gap: 1.5rem;
-  row-gap: 0.4rem;
-  padding: 1.75rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.5rem 0 0;
   text-decoration: none;
   color: inherit;
-  transition: padding-left 0.3s ease;
+  border-top: 1px solid var(--rule);
+  height: 100%;
   position: relative;
 }
 .lab-card::before {
   content: "";
   position: absolute;
-  left: -0.5rem;
-  top: 50%;
+  left: 0;
+  top: -1px;
+  height: 2px;
   width: 0;
-  height: 1px;
   background: var(--accent-warm);
-  transition: width 0.3s ease;
-}
-.lab-card:hover {
-  padding-left: 1rem;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .lab-card:hover::before {
-  width: 1rem;
+  width: 55%;
 }
 
 .lab-num {
@@ -87,6 +94,7 @@
   font-family: var(--serif);
   font-size: 1.55rem;
   letter-spacing: -0.01em;
+  line-height: 1.15;
   color: var(--ink);
 }
 .lab-meta {
@@ -97,20 +105,10 @@
   letter-spacing: 0.04em;
 }
 .lab-desc {
-  grid-column: 2 / -1;
   color: var(--ink-soft);
   font-size: 0.95rem;
-  margin-top: 0.1rem;
-}
-
-@media (max-width: 540px) {
-  .lab-card {
-    grid-template-columns: 2.25rem 1fr;
-  }
-  .lab-meta {
-    grid-column: 2;
-    margin-top: 0.1rem;
-  }
+  line-height: 1.5;
+  margin-top: 0.3rem;
 }
 
 /* artifact page header */
