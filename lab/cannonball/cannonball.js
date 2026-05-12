@@ -33,8 +33,14 @@
   let shots = [];
   let lastFrame = 0;
 
+  // Phase diagram constants
+  const PHASE_ANGLE_MAX = 90;
+  const PHASE_SPEED_MAX = 2;
+  let phaseImageCache = null; // { key, canvas }
+
   // ---------- DOM ----------
   const canvas = document.getElementById("board");
+  const phaseCanvas = document.getElementById("phase");
   const speedInput = document.getElementById("speed");
   const angleInput = document.getElementById("angle");
   const cannonInput = document.getElementById("cannonPos");
@@ -68,6 +74,11 @@
     c._w = rect.width;
     c._h = rect.height;
     c._dpr = dpr;
+  }
+  function sizeAll() {
+    sizeCanvas(canvas);
+    sizeCanvas(phaseCanvas);
+    phaseImageCache = null; // invalidate cached pixel-fill on resize
   }
 
   // ---------- style cache ----------
@@ -413,6 +424,201 @@
     periodEl.textContent = "—";
   }
 
+  // ---------- phase diagram ----------
+
+  function hexToRgb(hex) {
+    const h = hex.replace("#", "").trim();
+    if (h.length === 3) {
+      return [
+        parseInt(h[0] + h[0], 16),
+        parseInt(h[1] + h[1], 16),
+        parseInt(h[2] + h[2], 16),
+      ];
+    }
+    return [
+      parseInt(h.slice(0, 2), 16),
+      parseInt(h.slice(2, 4), 16),
+      parseInt(h.slice(4, 6), 16),
+    ];
+  }
+
+  // 0 = sub-orbital (crashes), 1 = elliptical (closed orbit), 2 = hyperbolic
+  function classifyPhase(thetaRad, v) {
+    const r = R_EARTH + altitude;
+    const v2 = v * v;
+    const energy = v2 / 2 - GM / r;
+    if (energy >= 0) return 2;
+    const angMom = r * v * Math.cos(thetaRad);
+    const a = -GM / (2 * energy); // positive for bound
+    const inside = 1 + (2 * energy * angMom * angMom) / (GM * GM);
+    const e = Math.sqrt(Math.max(0, inside));
+    const perigee = a * (1 - e);
+    return perigee < R_EARTH ? 0 : 1;
+  }
+
+  function computePhaseImage(plotW, plotH) {
+    const data = new Uint8ClampedArray(plotW * plotH * 4);
+    const accent = hexToRgb(styles().accent);
+    const ellA = Math.round(255 * 0.2);
+    const hypA = Math.round(255 * 0.42);
+    const piOver180 = Math.PI / 180;
+    const denomY = plotH - 1 || 1;
+    const denomX = plotW - 1 || 1;
+
+    for (let py = 0; py < plotH; py++) {
+      const v = (1 - py / denomY) * PHASE_SPEED_MAX;
+      for (let px = 0; px < plotW; px++) {
+        const thetaRad =
+          (px / denomX) * PHASE_ANGLE_MAX * piOver180;
+        const t = classifyPhase(thetaRad, v);
+        const i = (py * plotW + px) * 4;
+        if (t === 0) {
+          data[i + 3] = 0;
+        } else {
+          data[i] = accent[0];
+          data[i + 1] = accent[1];
+          data[i + 2] = accent[2];
+          data[i + 3] = t === 1 ? ellA : hypA;
+        }
+      }
+    }
+    return new ImageData(data, plotW, plotH);
+  }
+
+  function drawPhase() {
+    if (!phaseCanvas._w) return;
+    const ctx = phaseCanvas.getContext("2d");
+    const w = phaseCanvas._w;
+    const h = phaseCanvas._h;
+    const dpr = phaseCanvas._dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+
+    const padL = 50;
+    const padR = 16;
+    const padT = 16;
+    const padB = 34;
+    const plotW = Math.floor(w - padL - padR);
+    const plotH = Math.floor(h - padT - padB);
+    if (plotW < 10 || plotH < 10) return;
+
+    // (Re)compute the rasterized regions when altitude or size changes.
+    const key = `${altitude.toFixed(4)}-${plotW}x${plotH}`;
+    if (!phaseImageCache || phaseImageCache.key !== key) {
+      const imgData = computePhaseImage(plotW, plotH);
+      const tmp = document.createElement("canvas");
+      tmp.width = plotW;
+      tmp.height = plotH;
+      tmp.getContext("2d").putImageData(imgData, 0, 0);
+      phaseImageCache = { key, canvas: tmp };
+    }
+    ctx.drawImage(phaseImageCache.canvas, padL, padT);
+
+    const s = styles();
+    const r = R_EARTH + altitude;
+    const vEsc = Math.sqrt((2 * GM) / r);
+
+    // Axes
+    ctx.strokeStyle = s.rule;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(padL, h - padB);
+    ctx.lineTo(w - padR, h - padB);
+    ctx.moveTo(padL, padT);
+    ctx.lineTo(padL, h - padB);
+    ctx.stroke();
+
+    // v_esc reference line
+    if (vEsc <= PHASE_SPEED_MAX) {
+      const vEscY = h - padB - (vEsc / PHASE_SPEED_MAX) * plotH;
+      ctx.save();
+      ctx.strokeStyle = s.accent;
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 4]);
+      ctx.globalAlpha = 0.65;
+      ctx.beginPath();
+      ctx.moveTo(padL, vEscY);
+      ctx.lineTo(w - padR, vEscY);
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.fillStyle = s.muted;
+      ctx.font =
+        '10px ui-monospace, "JetBrains Mono", SFMono-Regular, monospace';
+      ctx.textAlign = "right";
+      ctx.textBaseline = "bottom";
+      ctx.fillText(
+        `v_esc(r) = ${vEsc.toFixed(2)}`,
+        w - padR - 4,
+        vEscY - 3
+      );
+    }
+
+    // Tick marks + numeric labels
+    ctx.fillStyle = s.muted;
+    ctx.font =
+      '10px ui-monospace, "JetBrains Mono", SFMono-Regular, monospace';
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    ctx.strokeStyle = s.rule;
+    for (const ang of [0, 30, 60, 90]) {
+      const x = padL + (ang / PHASE_ANGLE_MAX) * plotW;
+      ctx.beginPath();
+      ctx.moveTo(x, h - padB);
+      ctx.lineTo(x, h - padB + 4);
+      ctx.stroke();
+      ctx.fillText(`${ang}°`, x, h - padB + 6);
+    }
+    ctx.textAlign = "right";
+    ctx.textBaseline = "middle";
+    for (const vv of [0, 0.5, 1, 1.5, 2]) {
+      const y = h - padB - (vv / PHASE_SPEED_MAX) * plotH;
+      ctx.beginPath();
+      ctx.moveTo(padL - 4, y);
+      ctx.lineTo(padL, y);
+      ctx.stroke();
+      ctx.fillText(vv.toFixed(1), padL - 6, y);
+    }
+
+    // Axis labels
+    ctx.fillStyle = s.muted;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "alphabetic";
+    ctx.fillText("launch angle", padL + plotW / 2, h - 8);
+    ctx.save();
+    ctx.translate(14, padT + plotH / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("speed (× v_c at surface)", 0, 0);
+    ctx.restore();
+
+    // Current (angle, speed) marker
+    const angClamp = Math.max(0, Math.min(PHASE_ANGLE_MAX, launchAngleDeg));
+    const spdClamp = Math.max(0, Math.min(PHASE_SPEED_MAX, speed));
+    const mx = padL + (angClamp / PHASE_ANGLE_MAX) * plotW;
+    const my = h - padB - (spdClamp / PHASE_SPEED_MAX) * plotH;
+    ctx.fillStyle = s.accent;
+    ctx.beginPath();
+    ctx.arc(mx, my, 5.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = s.bg;
+    ctx.beginPath();
+    ctx.arc(mx, my, 1.8, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // Coalesce multiple slider events in a frame into a single redraw.
+  let phaseDirty = false;
+  function schedulePhase() {
+    if (phaseDirty) return;
+    phaseDirty = true;
+    requestAnimationFrame(() => {
+      phaseDirty = false;
+      drawPhase();
+    });
+  }
+
   // ---------- main loop ----------
   function frame(now) {
     if (!lastFrame) lastFrame = now;
@@ -445,10 +651,12 @@
   speedInput.addEventListener("input", (e) => {
     speed = +e.target.value;
     refreshSpeedLabel();
+    schedulePhase();
   });
   angleInput.addEventListener("input", (e) => {
     launchAngleDeg = +e.target.value;
     refreshAngleLabel();
+    schedulePhase();
   });
   cannonInput.addEventListener("input", (e) => {
     cannonAngle = (+e.target.value * Math.PI) / 180;
@@ -457,6 +665,7 @@
   altitudeInput.addEventListener("input", (e) => {
     altitude = +e.target.value;
     refreshAltitudeLabel();
+    schedulePhase();
   });
   zoomInput.addEventListener("input", (e) => {
     zoom = +e.target.value;
@@ -482,7 +691,8 @@
   refreshZoomLabel();
 
   requestAnimationFrame(() => {
-    sizeCanvas(canvas);
+    sizeAll();
+    drawPhase();
     requestAnimationFrame(frame);
   });
 
@@ -491,7 +701,8 @@
     if (resizeQueued) return;
     resizeQueued = true;
     requestAnimationFrame(() => {
-      sizeCanvas(canvas);
+      sizeAll();
+      drawPhase();
       resizeQueued = false;
     });
   });
