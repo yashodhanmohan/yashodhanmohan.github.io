@@ -308,9 +308,7 @@ POST_HTML = """<!doctype html>
 
     <meta name="color-scheme" content="light dark" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" />
+    <link rel="preload" href="/fonts/instrument-serif-400.woff2" as="font" type="font/woff2" crossorigin />
 
     <link rel="stylesheet" href="/styles.css" />
     <link rel="stylesheet" href="/writing/writing.css" />
@@ -411,9 +409,7 @@ INDEX_HTML = """<!doctype html>
 
     <meta name="color-scheme" content="light dark" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" />
+    <link rel="preload" href="/fonts/instrument-serif-400.woff2" as="font" type="font/woff2" crossorigin />
 
     <link rel="stylesheet" href="/styles.css" />
     <link rel="stylesheet" href="/writing/writing.css" />

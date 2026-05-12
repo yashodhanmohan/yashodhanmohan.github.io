@@ -1,3 +1,35 @@
+/* Self-hosted fonts — replaces the render-blocking Google Fonts CSS.
+   font-display: swap lets the browser paint with the fallback first and
+   swap to the web font once it's available, so text never blocks render. */
+@font-face {
+  font-family: "Instrument Serif";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/instrument-serif-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Instrument Serif";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/instrument-serif-400-italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/inter-var.woff2") format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url("/fonts/jetbrains-mono-var.woff2") format("woff2");
+}
+
 :root {
   color-scheme: light dark;
 
@@ -5,7 +37,7 @@
   --bg-deep: #e3e6e3;
   --ink: #14161e;
   --ink-soft: #2c2f3a;
-  --muted: #6b6f78;
+  --muted: #5b5f68;
   --rule: #d2d5d2;
 
   --accent-warm: #2e4cc7;
