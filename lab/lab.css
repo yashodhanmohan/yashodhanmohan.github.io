@@ -14,28 +14,7 @@
   max-width: 940px;
 }
 
-/* breadcrumb */
-
-.crumbs {
-  font-family: var(--mono);
-  font-size: 0.78rem;
-  color: var(--muted);
-  letter-spacing: 0.04em;
-  margin-bottom: 3rem;
-  text-transform: lowercase;
-}
-.crumbs a {
-  color: var(--ink-soft);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.crumbs a:hover {
-  color: var(--accent-warm);
-}
-.crumbs span[aria-hidden] {
-  margin: 0 0.5rem;
-  color: var(--muted);
-}
+/* (breadcrumb styles moved to /styles.css so they apply on /writing/ too) */
 
 /* lab index */
 
