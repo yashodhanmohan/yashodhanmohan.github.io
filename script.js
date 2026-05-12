@@ -21,9 +21,10 @@ if (!reduceMotion && "IntersectionObserver" in window) {
   document.querySelectorAll(".reveal").forEach((el) => el.classList.add("visible"));
 }
 
-// Gentle parallax for the orb — pointer-driven, very subtle.
+// Gentle pointer parallax on the whole orbit — composes with the
+// rotation animation, very subtle.
 if (!reduceMotion) {
-  const orbA = document.querySelector(".orb-a");
+  const orbit = document.querySelector(".orb-orbit");
   let raf = 0;
   let tx = 0;
   let ty = 0;
@@ -40,6 +41,6 @@ if (!reduceMotion) {
 
   function apply() {
     raf = 0;
-    if (orbA) orbA.style.translate = `${tx * -18}px ${ty * -18}px`;
+    if (orbit) orbit.style.translate = `${tx * -20}px ${ty * -20}px`;
   }
 }

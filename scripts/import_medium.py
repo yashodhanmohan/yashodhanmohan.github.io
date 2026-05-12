@@ -292,7 +292,10 @@ POST_HTML = """<!doctype html>
   </head>
   <body>
     <div class="grain" aria-hidden="true"></div>
-    <div class="orb orb-a" aria-hidden="true"></div>
+    <div class="orb-orbit" aria-hidden="true">
+      <div class="orb orb-a"></div>
+      <div class="orb orb-b"></div>
+    </div>
 
     <header class="topbar">
       <a class="mark" href="/">YMB</a>
@@ -389,7 +392,10 @@ INDEX_HTML = """<!doctype html>
   </head>
   <body>
     <div class="grain" aria-hidden="true"></div>
-    <div class="orb orb-a" aria-hidden="true"></div>
+    <div class="orb-orbit" aria-hidden="true">
+      <div class="orb orb-a"></div>
+      <div class="orb orb-b"></div>
+    </div>
 
     <header class="topbar">
       <a class="mark" href="/">YMB</a>
