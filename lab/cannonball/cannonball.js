@@ -27,6 +27,7 @@
   let cannonAngle = Math.PI / 2; // top of Earth
   let speed = 0.7; // in v_circ units (== absolute since v_circ = 1)
   let launchAngleDeg = 0;
+  let altitude = 0; // in R_EARTH units above the surface
   let zoom = 1;
   let playing = true;
   let shots = [];
@@ -37,10 +38,12 @@
   const speedInput = document.getElementById("speed");
   const angleInput = document.getElementById("angle");
   const cannonInput = document.getElementById("cannonPos");
+  const altitudeInput = document.getElementById("altitude");
   const zoomInput = document.getElementById("zoom");
   const speedValueEl = document.getElementById("speedValue");
   const angleValueEl = document.getElementById("angleValue");
   const cannonValueEl = document.getElementById("cannonValue");
+  const altitudeValueEl = document.getElementById("altitudeValue");
   const zoomValueEl = document.getElementById("zoomValue");
   const fireBtn = document.getElementById("fire");
   const clearBtn = document.getElementById("clear");
@@ -142,7 +145,10 @@
   // ---------- fire ----------
   function fire() {
     const launchRad = (launchAngleDeg * Math.PI) / 180;
-    const r0 = R_EARTH + 0.005;
+    // Launch position sits on a circle of radius R + altitude. The tiny
+    // 0.005 keeps it just above the surface even when altitude = 0 so the
+    // first physics step doesn't immediately register as a crash.
+    const r0 = R_EARTH + altitude + 0.005;
     const x = r0 * Math.cos(cannonAngle);
     const y = r0 * Math.sin(cannonAngle);
     // CCW tangent and outward radial unit vectors
@@ -328,9 +334,28 @@
   }
 
   function drawCannon(ctx, s) {
-    const baseX = R_EARTH * Math.cos(cannonAngle);
-    const baseY = R_EARTH * Math.sin(cannonAngle);
+    const r = R_EARTH + altitude;
+    const baseX = r * Math.cos(cannonAngle);
+    const baseY = r * Math.sin(cannonAngle);
     const [bpx, bpy] = toCanvas(baseX, baseY);
+
+    // If the cannon is above the surface, draw a faint plumb line from
+    // the surface up to it so the altitude is visually obvious.
+    if (altitude > 0.01) {
+      const [surfX, surfY] = toCanvas(
+        R_EARTH * Math.cos(cannonAngle),
+        R_EARTH * Math.sin(cannonAngle)
+      );
+      ctx.save();
+      ctx.strokeStyle = s.rule;
+      ctx.lineWidth = 1;
+      ctx.setLineDash([3, 4]);
+      ctx.beginPath();
+      ctx.moveTo(surfX, surfY);
+      ctx.lineTo(bpx, bpy);
+      ctx.stroke();
+      ctx.restore();
+    }
 
     const launchRad = (launchAngleDeg * Math.PI) / 180;
     const tx = -Math.sin(cannonAngle);
@@ -410,6 +435,9 @@
       ((cannonAngle * 180) / Math.PI + 360) % 360
     )}°`;
   }
+  function refreshAltitudeLabel() {
+    altitudeValueEl.textContent = `${altitude.toFixed(2)} R`;
+  }
   function refreshZoomLabel() {
     zoomValueEl.textContent = `${zoom.toFixed(2)}×`;
   }
@@ -425,6 +453,10 @@
   cannonInput.addEventListener("input", (e) => {
     cannonAngle = (+e.target.value * Math.PI) / 180;
     refreshCannonLabel();
+  });
+  altitudeInput.addEventListener("input", (e) => {
+    altitude = +e.target.value;
+    refreshAltitudeLabel();
   });
   zoomInput.addEventListener("input", (e) => {
     zoom = +e.target.value;
@@ -446,6 +478,7 @@
   refreshSpeedLabel();
   refreshAngleLabel();
   refreshCannonLabel();
+  refreshAltitudeLabel();
   refreshZoomLabel();
 
   requestAnimationFrame(() => {
