@@ -1,0 +1,317 @@
+/* Writing — post + index typography. Inherits tokens from /styles.css. */
+
+/* ---------- index ---------- */
+
+.writing-shell {
+  position: relative;
+  z-index: 2;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 3rem var(--gutter) 5rem;
+}
+
+.writing-title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  letter-spacing: -0.025em;
+  line-height: 1;
+  margin: 0 0 1.5rem;
+}
+
+.writing-lede {
+  font-family: var(--serif);
+  font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+  color: var(--ink-soft);
+  max-width: 50ch;
+  line-height: 1.55;
+  margin: 0 0 4rem;
+}
+
+.writing-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.writing-list li {
+  border-top: 1px solid var(--rule);
+}
+.writing-list li:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+
+.writing-card {
+  display: grid;
+  grid-template-columns: 4rem 1fr auto;
+  align-items: baseline;
+  column-gap: 1.5rem;
+  row-gap: 0.4rem;
+  padding: 1.75rem 0;
+  text-decoration: none;
+  color: inherit;
+  transition: padding-left 0.3s ease;
+  position: relative;
+}
+.writing-card::before {
+  content: "";
+  position: absolute;
+  left: -0.5rem;
+  top: 50%;
+  width: 0;
+  height: 1px;
+  background: var(--accent-warm);
+  transition: width 0.3s ease;
+}
+.writing-card:hover {
+  padding-left: 1rem;
+}
+.writing-card:hover::before {
+  width: 1rem;
+}
+
+.writing-card .post-year {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--accent-warm);
+  letter-spacing: 0.04em;
+}
+.writing-card .post-title {
+  font-family: var(--serif);
+  font-size: 1.55rem;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.writing-card .post-meta {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  color: var(--muted);
+  text-transform: lowercase;
+  letter-spacing: 0.04em;
+}
+.writing-card .post-excerpt {
+  grid-column: 2 / -1;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-top: 0.1rem;
+}
+
+@media (max-width: 540px) {
+  .writing-card {
+    grid-template-columns: 3rem 1fr;
+  }
+  .writing-card .post-meta {
+    grid-column: 2;
+    margin-top: 0.1rem;
+  }
+  .writing-card .post-excerpt {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ---------- post ---------- */
+
+.post {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 3rem var(--gutter) 5rem;
+}
+
+.post-header {
+  margin: 1.5rem 0 3rem;
+}
+
+.post-title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(2.4rem, 5.5vw, 3.6rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin: 0 0 1.25rem;
+  color: var(--ink);
+}
+
+.post-meta {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  margin: 0 0 1.75rem;
+}
+.post-meta time {
+  color: var(--ink-soft);
+}
+.post-meta span[aria-hidden] {
+  margin: 0 0.6rem;
+  color: var(--rule);
+}
+
+.post-subtitle {
+  font-family: var(--serif);
+  font-size: clamp(1.2rem, 1.8vw, 1.45rem);
+  line-height: 1.5;
+  font-style: italic;
+  color: var(--ink-soft);
+  margin: 0;
+  max-width: 56ch;
+}
+
+/* ---------- post body ---------- */
+
+.post-body {
+  font-family: var(--serif);
+  font-size: 1.18rem;
+  line-height: 1.7;
+  color: var(--ink);
+  max-width: 64ch;
+}
+
+.post-body p,
+.post-body ul,
+.post-body ol,
+.post-body blockquote,
+.post-body figure,
+.post-body pre {
+  margin: 0 0 1.4rem;
+}
+
+.post-body p {
+  text-wrap: pretty;
+}
+
+.post-body h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 1.7rem;
+  letter-spacing: -0.012em;
+  line-height: 1.2;
+  margin: 3rem 0 1rem;
+}
+.post-body h3 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-style: italic;
+  font-size: 1.35rem;
+  letter-spacing: -0.005em;
+  margin: 2.25rem 0 0.8rem;
+  color: var(--ink-soft);
+}
+
+.post-body a {
+  color: var(--ink);
+  border-bottom: 1px solid var(--accent-warm);
+  text-decoration: none;
+  transition: color 0.2s, border-color 0.2s;
+}
+.post-body a:hover {
+  color: var(--accent-warm);
+}
+
+.post-body em {
+  font-style: italic;
+}
+.post-body strong {
+  font-weight: 500;
+}
+
+.post-body blockquote {
+  border-left: 2px solid var(--accent-warm);
+  padding: 0.25rem 0 0.25rem 1.2rem;
+  font-style: italic;
+  color: var(--ink-soft);
+}
+.post-body blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.post-body ul,
+.post-body ol {
+  padding-left: 1.5rem;
+}
+.post-body li {
+  margin-bottom: 0.4rem;
+}
+.post-body li::marker {
+  color: var(--muted);
+}
+
+.post-body code {
+  font-family: var(--mono);
+  font-size: 0.88em;
+  padding: 0.08em 0.35em;
+  background: color-mix(in srgb, var(--ink-soft) 8%, transparent);
+  border-radius: 3px;
+}
+.post-body pre {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  padding: 1rem 1.2rem;
+  background: color-mix(in srgb, var(--ink-soft) 6%, transparent);
+  border-left: 2px solid var(--rule);
+  overflow-x: auto;
+  border-radius: 4px;
+}
+.post-body pre code {
+  background: transparent;
+  padding: 0;
+  font-size: inherit;
+}
+
+.post-body figure {
+  margin: 2rem 0;
+}
+.post-body figure img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 3px;
+}
+.post-body figcaption {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 0.6rem;
+  letter-spacing: 0.02em;
+}
+
+.post-body hr {
+  border: none;
+  border-top: 1px solid var(--rule);
+  margin: 2.5rem auto;
+  width: 30%;
+}
+
+.post-body p.pullquote {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.4rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  border-left: 2px solid var(--accent-warm);
+  padding-left: 1.25rem;
+  margin: 2rem 0;
+}
+
+/* ---------- post nav ---------- */
+
+.post-nav {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--rule);
+}
+.post-nav a {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: color 0.2s;
+}
+.post-nav a:hover {
+  color: var(--accent-warm);
+}

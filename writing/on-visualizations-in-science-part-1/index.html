@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>On visualizations in science — Part 1 — Writing — Yashodhan Mohan Bhatnagar</title>
+    <meta name="description" content="How to learn to picture things and equations and all the science that is compiled as text without the use of complex software." />
+    <meta name="author" content="Yashodhan Mohan Bhatnagar" />
+    <meta name="theme-color" content="#eef0ee" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0c0e14" media="(prefers-color-scheme: dark)" />
+
+    <link rel="canonical" href="https://yashodhanmohan.github.io/writing/on-visualizations-in-science-part-1/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="On visualizations in science — Part 1 — Writing" />
+    <meta property="og:description" content="How to learn to picture things and equations and all the science that is compiled as text without the use of complex software." />
+    <meta property="og:url" content="https://yashodhanmohan.github.io/writing/on-visualizations-in-science-part-1/" />
+    <meta property="og:site_name" content="Yashodhan Mohan Bhatnagar" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content="https://yashodhanmohan.github.io/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Yashodhan Mohan Bhatnagar — Engineer" />
+    <meta property="article:author" content="Yashodhan Mohan Bhatnagar" />
+    <meta property="article:section" content="Writing" />
+    <meta property="article:published_time" content="2019-12-28T17:04:25.851Z" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="On visualizations in science — Part 1 — Writing" />
+    <meta name="twitter:description" content="How to learn to picture things and equations and all the science that is compiled as text without the use of complex software." />
+    <meta name="twitter:image" content="https://yashodhanmohan.github.io/og-image.png" />
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://yashodhanmohan.github.io/writing/on-visualizations-in-science-part-1/#article",
+      "headline": "On visualizations in science — Part 1",
+      "url": "https://yashodhanmohan.github.io/writing/on-visualizations-in-science-part-1/",
+      "datePublished": "2019-12-28T17:04:25.851Z",
+      "author": {
+        "@type": "Person",
+        "name": "Yashodhan Mohan Bhatnagar",
+        "url": "https://yashodhanmohan.github.io/"
+      },
+      "description": "How to learn to picture things and equations and all the science that is compiled as text without the use of complex software.",
+      "publisher": {
+        "@type": "Person",
+        "name": "Yashodhan Mohan Bhatnagar",
+        "url": "https://yashodhanmohan.github.io/"
+      },
+      "image": "https://yashodhanmohan.github.io/og-image.png"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Portfolio",
+          "item": "https://yashodhanmohan.github.io/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Writing",
+          "item": "https://yashodhanmohan.github.io/writing/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "On visualizations in science — Part 1",
+          "item": "https://yashodhanmohan.github.io/writing/on-visualizations-in-science-part-1/"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <meta name="color-scheme" content="light dark" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" />
+
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/writing/writing.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="orb orb-a" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <a class="mark" href="/">YMB</a>
+      <span class="status">
+        <span class="dot"></span>
+        Vadodara · IST
+      </span>
+    </header>
+
+    <main class="post">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/">portfolio</a>
+        <span aria-hidden="true">›</span>
+        <a href="/writing/">writing</a>
+        <span aria-hidden="true">›</span>
+        <span>on-visualizations-in-science-part-1</span>
+      </nav>
+
+      <article class="h-entry">
+        <header class="post-header">
+          <h1 class="post-title">On visualizations in science — Part 1</h1>
+          <p class="post-meta">
+            <time class="dt-published" datetime="2019-12-28T17:04:25.851Z">December 28, 2019</time>
+            <span aria-hidden="true">·</span>
+            <span>4 min read</span>
+          </p>
+          
+          <p class="post-subtitle p-summary">How to learn to picture things and equations and all the science that is compiled as text without the use of complex software.</p>
+        </header>
+
+        <div class="post-body e-content">
+        <p>Let’s start off by calling out — this is not a technical piece. It does not deal with MATLAB and SciPy and MatPlotLib and GNUPlot. The purpose of this article is to jot down the common techniques I’ve learned over the years to help me understand concepts in science. Since I’ve always been lenient towards physics, I’ll be using examples from it to make my point. I had always imagined it to be a lecture or presentation of sorts, but for now, an article would do.</p>
+        <figure><img src="/writing/img/1*on03MNPm_fsHp5_tP5fJIQ.jpeg" alt="" loading="lazy" /></figure>
+        <p>If someone were to ask me which was the best animation/visualization/rendering platform existing, I would always prefer to answer the “human brain”. The reason being it does not need existing formulae or code that came from what we already know to bring up solutions. Some of the most creative solutions come from the strangest visualizations that popped in someone's brain for which they were able to come up with a valid equation or model. The brain allows you to bend fields, feel the forces between two charges, manipulate infinite-dimensional vector spaces by treating each vector as a function and so on. In some sense, I’m probably also alluding to what Einstein called Gedanken experiments. This is where you use your brain as a laboratory to conduct experiments that are otherwise physically impossible or not feasible. Einstein used this method to ride a ray of light and experience (in his head) the world around him. Do not confuse this with pure unbounded imagination. Consider this to be the most boring form of dreaming, where you’re not allowed to fly because the laws of physics deny it.</p>
+        <p>So, how do you start picturing things? In physics, by first making sure that you can picture <em>nothing.</em> Empty space is a very important entity in physics and it is vital that you can imagine it clearly. As you go deeper into physics, empty space gains greater importance. To imagine an empty space, close your eyes and imagine whatever you think an empty space means. If you can see twinkling stars, you’re thinking of outer space. Get rid of the stars. If your empty space has a color (generally red or white), make sure you get rid of it too. It helps in the long term if your empty space is black. If you can see yourself standing in the middle of the space, get rid of yourself. What we are trying to do here is make an assumption of a physical entity and make it as scientifically accurate as possible. Empty space should ideally (for our purposes) be void of any forces, matter or radiation of any sort.</p>
+        <p>Now that you have an empty space ready, let’s fill it with something. Let’s start with something simple. Contrary to popular examples, do not consider a ball to be a simple object (I’ll explain why later). For my example, I prefer a neutron. Put your neutron anywhere in your empty space. You might think that a neutron might be <em>too</em> simple. To give some clarity, by introducing that lonely neutron, you’ve filled your entire empty space with a gravitational field (small though it may be). Your empty space is no longer empty. But we’ll come back to the gravitational aspect later on. For now, we’ll try to do simple things with that neutron.</p>
+        <p>Let’s try to move the neutron. Just imagine your neutron is moving with some velocity. If you are imagining squiggly lines behind the neutron to visualize its motion, get rid of them. If you’re imagining something like a comet or something you see in popular diagrams of particle accelerators, you’re doing it wrong. Ideally, your neutron should be looking the same. If you feel like even though the neutron has a velocity, in your head it is standing still, you’ve reached the correct visualization. You’ve also just experienced two concepts — relative motion and frames of reference. Try to rationalize what you’re picturing. Since your space (not going to prepend “empty” going forwards) has only one neutron and no other entity which can act as a separate frame of reference, you cannot define its motion. Or to state it in a more politically correct manner, you cannot discern if it is moving or not. Remember, you are a God-observer and cannot be considered as a frame of reference since you do not exist in that space. Hence, there is no concept of velocity of an isolated particle in a truly empty space. We could have reached a simpler (but cruder) picture if we imagined a train leaving a station and slowly removing things from its surroundings. Kick out the station, the tracks, the scenery, the stars and galaxies around it. And suddenly, you will not be able to see the train moving even though you knew that it was leaving a station.</p>
+        <p>I’ll end this part here as it feels like a good stopping point. In my next part, we’ll try to introduce a companion for our lonely neutron to see how our imagination plays out.</p>
+        </div>
+      </article>
+
+      <nav class="post-nav" aria-label="More writing">
+        <a href="/writing/">← back to writing</a>
+      </nav>
+    </main>
+
+    <footer class="footer">
+      <span>© 2026 Yashodhan Mohan Bhatnagar</span>
+      <span class="muted">Built quietly in Vadodara.</span>
+    </footer>
+  </body>
+</html>

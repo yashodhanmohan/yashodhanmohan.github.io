@@ -526,6 +526,15 @@ main {
   font-family: var(--serif);
   margin-top: 1.5rem;
 }
+.aside a {
+  color: var(--ink);
+  border-bottom: 1px solid var(--accent-warm);
+  text-decoration: none;
+  transition: color 0.2s, border-color 0.2s;
+}
+.aside a:hover {
+  color: var(--accent-warm);
+}
 
 @media (max-width: 540px) {
   .writing li {
