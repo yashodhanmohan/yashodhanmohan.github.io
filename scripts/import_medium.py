@@ -33,6 +33,29 @@ IMG_DIR = WRITING / "img"
 POST_HASH_RE = re.compile(r"-[a-f0-9]{8,}$")
 SITE_URL = "https://yashodhanmohan.github.io"
 
+# Hand-assigned tags by slug. Medium archives don't include tags, so this
+# is the source of truth. Any new posts default to "essay".
+TAG_BY_SLUG = {
+    # 2019 short-story batch
+    "amnesia": "stories",
+    "choices": "stories",
+    "fire-and-rain": "stories",
+    "hanged-till-death": "stories",
+    "the-breath-ever-after": "stories",
+    "the-fallen-hero": "stories",
+    "the-final-execution": "stories",
+    "trey-s-world": "stories",
+    # science / pedagogy
+    "on-visualizations-in-science-part-1": "science",
+    "on-visualizations-in-science-part-2": "science",
+    # essays
+    "the-spirit-of-the-written-word": "essay",
+    "shainnon-limit": "essay",
+    # engineering / technical
+    "simulate-an-ubuntu-like-vm-inside-macos": "engineering",
+}
+TAG_ORDER = ["stories", "science", "essay", "engineering"]
+
 
 # ---------- slug + dates ----------
 
@@ -229,6 +252,7 @@ def parse_post(path: Path):
     body_html = render_body(body_section) if body_section else ""
 
     slug = derive_slug(path.name)
+    tag = TAG_BY_SLUG.get(slug, "essay")
 
     return {
         "slug": slug,
@@ -239,6 +263,7 @@ def parse_post(path: Path):
         "body_html": body_html,
         "reading_time": reading_time(plain_text),
         "source_filename": path.name,
+        "tag": tag,
     }
 
 
@@ -321,6 +346,8 @@ POST_HTML = """<!doctype html>
             <time class="dt-published" datetime="{date_iso}">{date_human}</time>
             <span aria-hidden="true">·</span>
             <span>{reading_time} min read</span>
+            <span aria-hidden="true">·</span>
+            <a class="post-tag" href="/writing/?tag={tag}">{tag}</a>
           </p>
           {subtitle_block}
         </header>
@@ -360,6 +387,7 @@ INDEX_HTML = """<!doctype html>
 
     <link rel="canonical" href="{site}/writing/" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/atom+xml" title="Yashodhan Mohan Bhatnagar — writing" href="/atom.xml" />
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Writing — Yashodhan Mohan Bhatnagar" />
@@ -416,13 +444,48 @@ INDEX_HTML = """<!doctype html>
       <p class="writing-lede">
         A small archive of essays, short stories, and notes. Older pieces
         first lived on Medium and have been brought home; new ones land here
-        directly.
+        directly. There's an
+        <a href="/atom.xml" class="feed-link">Atom feed</a> too.
       </p>
+
+      <nav class="tag-filter" aria-label="Filter by tag">
+{chips}
+      </nav>
 
       <ol class="writing-list">
 {rows}
       </ol>
     </main>
+
+    <script>
+      (function () {{
+        const chips = document.querySelectorAll(".tag-chip");
+        const items = document.querySelectorAll(".writing-list > li");
+        function applyFilter(tag) {{
+          chips.forEach((c) => {{
+            const isActive = c.dataset.tag === tag;
+            c.classList.toggle("active", isActive);
+            c.setAttribute("aria-pressed", isActive ? "true" : "false");
+          }});
+          items.forEach((item) => {{
+            const t = item.dataset.tag || "";
+            item.style.display = tag === "all" || t === tag ? "" : "none";
+          }});
+          const url = new URL(location.href);
+          if (tag === "all") url.searchParams.delete("tag");
+          else url.searchParams.set("tag", tag);
+          history.replaceState(null, "", url.toString());
+        }}
+        chips.forEach((c) =>
+          c.addEventListener("click", () => applyFilter(c.dataset.tag))
+        );
+        // Honor ?tag= query parameter on load
+        const initial = new URL(location.href).searchParams.get("tag");
+        if (initial && document.querySelector(`.tag-chip[data-tag="${{initial}}"]`)) {{
+          applyFilter(initial);
+        }}
+      }})();
+    </script>
 
     <footer class="footer">
       <span>© {year} Yashodhan Mohan Bhatnagar</span>
@@ -499,26 +562,41 @@ def render_post_page(post: dict) -> str:
         site=SITE_URL,
         year=dt.datetime.now().year,
         json_ld=json.dumps(json_ld, indent=2, ensure_ascii=False),
+        tag=post["tag"],
     )
 
 
 def render_index_page(posts: list[dict]) -> str:
     rows = []
-    for i, post in enumerate(posts, 1):
+    for post in posts:
         year = ""
         if post["date_iso"]:
             year = parse_iso(post["date_iso"]).strftime("%Y")
         excerpt = post["subtitle"] or ""
         rows.append(
-            f"""        <li>
+            f"""        <li data-tag="{post['tag']}">
           <a href="/writing/{post['slug']}/" class="writing-card">
             <span class="post-year">{year}</span>
             <span class="post-title">{html.escape(post['title'])}</span>
-            <span class="post-meta">{post['reading_time']} min</span>
+            <span class="post-meta">{post['reading_time']} min · {post['tag']}</span>
             <span class="post-excerpt">{html.escape(excerpt)}</span>
           </a>
         </li>"""
         )
+
+    # Tag chips: "all" + each tag in TAG_ORDER that has posts
+    counts = {"all": len(posts)}
+    for p in posts:
+        counts[p["tag"]] = counts.get(p["tag"], 0) + 1
+    chip_html = [
+        f'        <button class="tag-chip active" type="button" data-tag="all" aria-pressed="true">all <span class="count">{counts["all"]}</span></button>'
+    ]
+    for tag in TAG_ORDER:
+        if counts.get(tag):
+            chip_html.append(
+                f'        <button class="tag-chip" type="button" data-tag="{tag}" aria-pressed="false">{tag} <span class="count">{counts[tag]}</span></button>'
+            )
+    chips = "\n".join(chip_html)
 
     json_ld = {
         "@context": "https://schema.org",
@@ -554,9 +632,62 @@ def render_index_page(posts: list[dict]) -> str:
     return INDEX_HTML.format(
         site=SITE_URL,
         rows="\n".join(rows),
+        chips=chips,
         year=dt.datetime.now().year,
         json_ld=json.dumps(json_ld, indent=2, ensure_ascii=False),
     )
+
+
+# ---------- Atom feed ----------
+
+def render_atom_feed(posts: list[dict]) -> str:
+    """Produce an Atom 1.0 feed from the posts manifest."""
+    if posts:
+        # Use the latest published date as the feed's <updated>
+        latest = max(
+            (p["date_iso"] for p in posts if p["date_iso"]),
+            default=dt.datetime.now(dt.timezone.utc).isoformat(),
+        )
+    else:
+        latest = dt.datetime.now(dt.timezone.utc).isoformat()
+
+    def esc(s: str) -> str:
+        return html.escape(s or "", quote=False)
+
+    entries = []
+    for p in posts:
+        url = f"{SITE_URL}/writing/{p['slug']}/"
+        entries.append(f"""  <entry>
+    <title type="text">{esc(p['title'])}</title>
+    <id>{url}</id>
+    <link rel="alternate" type="text/html" href="{url}" />
+    <updated>{p['date_iso']}</updated>
+    <published>{p['date_iso']}</published>
+    <summary type="text">{esc(p['subtitle'] or p['title'])}</summary>
+    <category term="{p['tag']}" />
+    <author>
+      <name>Yashodhan Mohan Bhatnagar</name>
+      <uri>{SITE_URL}/</uri>
+    </author>
+  </entry>""")
+
+    return f"""<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Yashodhan Mohan Bhatnagar</title>
+  <subtitle>Essays, short stories, and notes.</subtitle>
+  <id>{SITE_URL}/</id>
+  <link rel="alternate" type="text/html" href="{SITE_URL}/writing/" />
+  <link rel="self" type="application/atom+xml" href="{SITE_URL}/atom.xml" />
+  <updated>{latest}</updated>
+  <author>
+    <name>Yashodhan Mohan Bhatnagar</name>
+    <uri>{SITE_URL}/</uri>
+  </author>
+  <generator uri="{SITE_URL}/">yashodhanmohan.github.io</generator>
+
+{chr(10).join(entries)}
+</feed>
+"""
 
 
 # ---------- entrypoint ----------
@@ -607,6 +738,7 @@ def main():
             "subtitle": p["subtitle"],
             "date_iso": p["date_iso"],
             "reading_time": p["reading_time"],
+            "tag": p["tag"],
             "url": f"/writing/{p['slug']}/",
             "medium_canonical": p["canonical"],
         }
@@ -616,6 +748,10 @@ def main():
         json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8"
     )
     print(f"  wrote writing/posts.json")
+
+    # Atom feed at the site root
+    (REPO / "atom.xml").write_text(render_atom_feed(posts), encoding="utf-8")
+    print(f"  wrote atom.xml")
 
 
 if __name__ == "__main__":

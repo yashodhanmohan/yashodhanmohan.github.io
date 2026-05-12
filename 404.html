@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Not found — Yashodhan Mohan Bhatnagar</title>
+    <meta name="description" content="The page you're looking for doesn't exist on yashodhanmohan.github.io." />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#eef0ee" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0c0e14" media="(prefers-color-scheme: dark)" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="color-scheme" content="light dark" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      .not-found {
+        position: relative;
+        z-index: 2;
+        max-width: 640px;
+        margin: 0 auto;
+        padding: 5rem var(--gutter) 6rem;
+      }
+      .not-found .num {
+        font-family: var(--serif);
+        font-size: clamp(6rem, 16vw, 12rem);
+        line-height: 0.9;
+        color: var(--accent-warm);
+        margin: 0 0 1.25rem;
+        letter-spacing: -0.04em;
+      }
+      .not-found h1 {
+        font-family: var(--serif);
+        font-weight: 400;
+        font-size: clamp(2rem, 4vw, 2.6rem);
+        line-height: 1.1;
+        margin: 0 0 1.5rem;
+        letter-spacing: -0.015em;
+        color: var(--ink);
+      }
+      .not-found p {
+        font-family: var(--serif);
+        font-size: clamp(1.05rem, 1.4vw, 1.2rem);
+        color: var(--ink-soft);
+        margin: 0 0 2.5rem;
+        max-width: 52ch;
+        line-height: 1.55;
+      }
+      .not-found .links {
+        font-family: var(--mono);
+        font-size: 0.85rem;
+        color: var(--muted);
+        letter-spacing: 0.04em;
+        text-transform: lowercase;
+      }
+      .not-found .links a {
+        color: var(--ink);
+        text-decoration: none;
+        border-bottom: 1px solid var(--accent-warm);
+        padding-bottom: 1px;
+        transition: color 0.2s;
+      }
+      .not-found .links a:hover {
+        color: var(--accent-warm);
+      }
+      .not-found .links span[aria-hidden] {
+        margin: 0 0.6rem;
+        color: var(--rule);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="orb-orbit" aria-hidden="true">
+      <div class="orb orb-a"></div>
+      <div class="orb orb-b"></div>
+    </div>
+
+    <header class="topbar">
+      <a class="mark" href="/">YMB</a>
+      <span class="status">
+        <span class="dot"></span>
+        Vadodara · IST
+      </span>
+    </header>
+
+    <main class="not-found">
+      <p class="num">404.</p>
+      <h1>Page not found.</h1>
+      <p>
+        Whatever you were looking for, it isn't here. The link might be old,
+        the URL might have a typo, or I might have moved something without
+        leaving a forwarding address. Apologies either way — try one of these.
+      </p>
+      <nav class="links" aria-label="Site sections">
+        <a href="/">portfolio</a>
+        <span aria-hidden="true">·</span>
+        <a href="/lab/">lab</a>
+        <span aria-hidden="true">·</span>
+        <a href="/writing/">writing</a>
+      </nav>
+    </main>
+
+    <footer class="footer">
+      <span>© <span id="year">2026</span> Yashodhan Mohan Bhatnagar</span>
+      <span class="muted">Built quietly in Vadodara.</span>
+    </footer>
+
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>

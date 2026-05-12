@@ -28,6 +28,72 @@
   margin: 0 0 4rem;
 }
 
+/* ---------- tag filter ---------- */
+
+.tag-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0 0 2.5rem;
+}
+
+.tag-chip {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  padding: 0.4rem 0.95rem;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+  border-radius: 999px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+.tag-chip:hover {
+  color: var(--accent-warm);
+  border-color: var(--accent-warm);
+}
+.tag-chip.active {
+  color: var(--bg);
+  background: var(--accent-warm);
+  border-color: var(--accent-warm);
+}
+.tag-chip .count {
+  font-size: 0.78em;
+  opacity: 0.75;
+  font-feature-settings: "tnum" 1;
+}
+.tag-chip:focus-visible {
+  outline: 2px solid var(--accent-warm);
+  outline-offset: 2px;
+}
+
+.writing-lede .feed-link {
+  color: var(--ink-soft);
+  border-bottom: 1px solid var(--accent-warm);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.writing-lede .feed-link:hover {
+  color: var(--accent-warm);
+}
+
+/* post tag chip on the post page meta */
+.post-meta .post-tag {
+  color: var(--accent-warm);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  text-transform: lowercase;
+  transition: border-color 0.2s;
+}
+.post-meta .post-tag:hover {
+  border-bottom-color: var(--accent-warm);
+}
+
 .writing-list {
   list-style: none;
   margin: 0;

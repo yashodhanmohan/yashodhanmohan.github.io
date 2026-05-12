@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Yashodhan Mohan Bhatnagar</title>
+  <subtitle>Essays, short stories, and notes.</subtitle>
+  <id>https://yashodhanmohan.github.io/</id>
+  <link rel="alternate" type="text/html" href="https://yashodhanmohan.github.io/writing/" />
+  <link rel="self" type="application/atom+xml" href="https://yashodhanmohan.github.io/atom.xml" />
+  <updated>2025-09-11T22:12:12.070Z</updated>
+  <author>
+    <name>Yashodhan Mohan Bhatnagar</name>
+    <uri>https://yashodhanmohan.github.io/</uri>
+  </author>
+  <generator uri="https://yashodhanmohan.github.io/">yashodhanmohan.github.io</generator>
+
+  <entry>
+    <title type="text">shAInnon Limit</title>
+    <id>https://yashodhanmohan.github.io/writing/shainnon-limit/</id>
+    <link rel="alternate" type="text/html" href="https://yashodhanmohan.github.io/writing/shainnon-limit/" />
+    <updated>2025-09-11T22:12:12.070Z</updated>
+    <published>2025-09-11T22:12:12.070Z</published>
+    <summary type="text">I just wrote the title and the prompt, everything else is written by Claude.</summary>
+    <category term="essay" />
+    <author>
+      <name>Yashodhan Mohan Bhatnagar</name>
+      <uri>https://yashodhanmohan.github.io/</uri>
+    </author>
+  </entry>
+  <entry>
+    <title type="text">Simulate an Ubuntu-like VM inside MacOS</title>
+    <id>https://yashodhanmohan.github.io/writing/simulate-an-ubuntu-like-vm-inside-macos/</id>
+    <link rel="alternate" type="text/html" href="https://yashodhanmohan.github.io/writing/simulate-an-ubuntu-like-vm-inside-macos/" />
+    <updated>2024-01-14T09:46:04.200Z</updated>
+    <published>2024-01-14T09:46:04.200Z</published>
+    <summary type="text">There are times, when you’re working on a remote system that has a Unix system like Ubuntu, RHEL, etc. You want to develop scripts…</summary>
+    <category term="engineering" />
+    <author>
+      <name>Yashodhan Mohan Bhatnagar</name>
+      <uri>https://yashodhanmohan.github.io/</uri>
+    </author>
+  </entry>
+  <entry>
+    <title type="text">The Spirit of the Written Word</title>
+    <id>https://yashodhanmohan.github.io/writing/the-spirit-of-the-written-word/</id>
+    <link rel="alternate" type="text/html" href="https://yashodhanmohan.github.io/writing/the-spirit-of-the-written-word/" />
+    <updated>2022-05-27T15:29:10.293Z</updated>
+    <published>2022-05-27T15:29:10.293Z</published>
+    <summary type="text">Sumer was one of the first civilisations on this planet. It had existed since before the 25th century BC in what is current day south of…</summary>
+    <category term="essay" />
+    <author>
+      <name>Yashodhan Mohan Bhatnagar</name>
+      <uri>https://yashodhanmohan.github.io/</uri>
+    </author>
+  </entry>
+  <entry>
+    <title type="text">On visualizations in science — Part 2</title>
+    <id>https://yashodhanmohan.github.io/writing/on-visualizations-in-science-part-2/</id>
+    <link rel="alternate" type="text/html" href="https://yashodhanmohan.github.io/writing/on-visualizations-in-science-part-2/" />
+    <updated>2021-01-16T17:05:08.569Z</updated>
+    <published>2021-01-16T17:05:08.569Z</published>
+    <summary type="text">In the last chapter, we had left our lonely neutron to roll away in its space without any destination. As we realised, we couldn’t really…</summary>
+    <category term="science" />
+    <author>
+      <name>Yashodhan Mohan Bhatnagar</name>
+      <uri>https://yashodhanmohan.github.io/</uri>
+    </author>
+  </entry>
+  <entry>
+    <title type="text">On visualizations in science — Part 1</title>
+    <id>https://yashodhanmohan.github.io/writing/on-visualizations-in-science-part-1/</id>
+    <link rel="alternate" type="text/html" href="https://yashodhanmohan.github.io/writing/on-visualizations-in-science-part-1/" />
+    <updated>2019-12-28T17:04:25.851Z</updated>
+    <published>2019-12-28T17:04:25.851Z</published>
+    <summary type="text">How to learn to picture things and equations and all the science that is compiled as text without the use of complex software.</summary>
+    <category term="science" />
+    <author>
+      <name>Yashodhan Mohan Bhatnagar</name>
+      <uri>https://yashodhanmohan.github.io/</uri>
+    </author>
+  </entry>
+  <entry>
+    <title type="text">Trey’s World</title>
+    <id>https://yashodhanmohan.github.io/writing/trey-s-world/</id>
+    <link rel="alternate" type="text/html" href="https://yashodhanmohan.github.io/writing/trey-s-world/" />
+    <updated>2019-10-06T08:37:39.733Z</updated>
+    <published>2019-10-06T08:37:39.733Z</published>
+    <summary type="text">Trey had understood the realities of life. He knew what it meant to be practical. He felt the ruthlessness of the world around him. He…</summary>
+    <category term="stories" />
+    <author>
+      <name>Yashodhan Mohan Bhatnagar</name>
+      <uri>https://yashodhanmohan.github.io/</uri>
+    </author>
+  </entry>
+  <entry>
+    <title type="text">Fire and Rain</title>
+    <id>https://yashodhanmohan.github.io/writing/fire-and-rain/</id>
+    <link rel="alternate" type="text/html" href="https://yashodhanmohan.github.io/writing/fire-and-rain/" />
+    <updated>2019-10-06T08:36:13.957Z</updated>
+    <published>2019-10-06T08:36:13.957Z</published>
+    <summary type="text">He sat cross legged staring into the blaring blue sky for a minute before he opened the measly tin box. It was still not noon, and the…</summary>
+    <category term="stories" />
+    <author>
+      <name>Yashodhan Mohan Bhatnagar</name>
+      <uri>https://yashodhanmohan.github.io/</uri>
+    </author>
+  </entry>
+  <entry>
+    <title type="text">Amnesia</title>
+    <id>https://yashodhanmohan.github.io/writing/amnesia/</id>
+    <link rel="alternate" type="text/html" href="https://yashodhanmohan.github.io/writing/amnesia/" />
+    <updated>2019-10-06T08:35:00.297Z</updated>
+    <published>2019-10-06T08:35:00.297Z</published>
+    <summary type="text">I woke up to the alarm of a bright yellow sun glaring at me through an open window against the backdrop of a cheerful little summer…</summary>
+    <category term="stories" />
+    <author>
+      <name>Yashodhan Mohan Bhatnagar</name>
+      <uri>https://yashodhanmohan.github.io/</uri>
+    </author>
+  </entry>
+  <entry>
+    <title type="text">Choices</title>
+    <id>https://yashodhanmohan.github.io/writing/choices/</id>
+    <link rel="alternate" type="text/html" href="https://yashodhanmohan.github.io/writing/choices/" />
+    <updated>2019-10-06T08:31:53.491Z</updated>
+    <published>2019-10-06T08:31:53.491Z</published>
+    <summary type="text">He walked across the garden towards the South entrance of the majestic structure which seemed unending on either sides of him. The sun…</summary>
+    <category term="stories" />
+    <author>
+      <name>Yashodhan Mohan Bhatnagar</name>
+      <uri>https://yashodhanmohan.github.io/</uri>
+    </author>
+  </entry>
+  <entry>
+    <title type="text">Hanged Till Death</title>
+    <id>https://yashodhanmohan.github.io/writing/hanged-till-death/</id>
+    <link rel="alternate" type="text/html" href="https://yashodhanmohan.github.io/writing/hanged-till-death/" />
+    <updated>2019-10-06T08:30:11.594Z</updated>
+    <published>2019-10-06T08:30:11.594Z</published>
+    <summary type="text">He limped out the dark passageway into the closed courtyard with the sun blatantly shining into his eyes blinding him for a moment. The…</summary>
+    <category term="stories" />
+    <author>
+      <name>Yashodhan Mohan Bhatnagar</name>
+      <uri>https://yashodhanmohan.github.io/</uri>
+    </author>
+  </entry>
+  <entry>
+    <title type="text">The Breath Ever-After</title>
+    <id>https://yashodhanmohan.github.io/writing/the-breath-ever-after/</id>
+    <link rel="alternate" type="text/html" href="https://yashodhanmohan.github.io/writing/the-breath-ever-after/" />
+    <updated>2019-10-06T08:26:18.000Z</updated>
+    <published>2019-10-06T08:26:18.000Z</published>
+    <summary type="text">As he sat down, the lamp flickered. He realized he didn’t have much time. He pulled a blank sheet in front of him and grabbed a ragged…</summary>
+    <category term="stories" />
+    <author>
+      <name>Yashodhan Mohan Bhatnagar</name>
+      <uri>https://yashodhanmohan.github.io/</uri>
+    </author>
+  </entry>
+  <entry>
+    <title type="text">The Fallen Hero</title>
+    <id>https://yashodhanmohan.github.io/writing/the-fallen-hero/</id>
+    <link rel="alternate" type="text/html" href="https://yashodhanmohan.github.io/writing/the-fallen-hero/" />
+    <updated>2019-10-06T08:24:00.237Z</updated>
+    <published>2019-10-06T08:24:00.237Z</published>
+    <summary type="text">Trevor hurried through the granite halls, agitated by what he had learnt. Aisles of books passed him by and seemed only a blur to him. He…</summary>
+    <category term="stories" />
+    <author>
+      <name>Yashodhan Mohan Bhatnagar</name>
+      <uri>https://yashodhanmohan.github.io/</uri>
+    </author>
+  </entry>
+  <entry>
+    <title type="text">The Final Execution</title>
+    <id>https://yashodhanmohan.github.io/writing/the-final-execution/</id>
+    <link rel="alternate" type="text/html" href="https://yashodhanmohan.github.io/writing/the-final-execution/" />
+    <updated>2019-10-06T08:20:01.459Z</updated>
+    <published>2019-10-06T08:20:01.459Z</published>
+    <summary type="text">They were the last men alive in the field. All his men lay dead, having sacrificed their lives for their country. Dead bodies were strewn…</summary>
+    <category term="stories" />
+    <author>
+      <name>Yashodhan Mohan Bhatnagar</name>
+      <uri>https://yashodhanmohan.github.io/</uri>
+    </author>
+  </entry>
+</feed>
