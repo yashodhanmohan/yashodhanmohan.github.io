@@ -1,8 +1,10 @@
-// Word-shine on writing posts.
+// Group-shine on writing posts.
 //
-// Tokenizes the body once (wrap every word > 4 chars in a <span class="word">),
-// then every 3 seconds picks a random word currently in the viewport and
-// briefly adds .shine so a titanium-blue gradient sweeps across it.
+// Tokenizes the body once (wraps every word in a <span class="word">; marks
+// words >4 chars with .longword as valid seeds). Every 3 seconds, picks a
+// random in-viewport longword and a contiguous run of 3–4 words around it
+// on the same line, wraps them in a <span class="shine-group">, lets the
+// gradient sweep animate, and unwraps when it's done.
 
 (() => {
   const root = document.querySelector(".post-body");
@@ -11,7 +13,6 @@
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   // ---- tokenize ----
-  // Skip text inside these elements; the rest is fair game.
   const REJECT = new Set(["PRE", "CODE", "FIGCAPTION"]);
 
   function inRejected(node) {
@@ -40,10 +41,10 @@
         frag.appendChild(document.createTextNode(part));
         continue;
       }
-      const alpha = part.replace(/[^A-Za-z]/g, "");
-      if (alpha.length > 4 && /^[A-Za-z]/.test(part)) {
+      if (/[A-Za-z]/.test(part)) {
         const span = document.createElement("span");
-        span.className = "word";
+        const alphaLen = part.replace(/[^A-Za-z]/g, "").length;
+        span.className = alphaLen > 4 ? "word longword" : "word";
         span.textContent = part;
         frag.appendChild(span);
       } else {
@@ -53,13 +54,13 @@
     node.parentNode.replaceChild(frag, node);
   }
 
-  const allWords = Array.from(root.querySelectorAll(".word"));
-  if (allWords.length === 0) return;
+  const longwords = Array.from(root.querySelectorAll(".word.longword"));
+  if (longwords.length === 0) return;
 
   // ---- shine loop ----
-  let lastWord = null;
-  const SHINE_MS = 1000;
+  const SHINE_MS = 1600;
   const INTERVAL_MS = 3000;
+  let lastSeed = null;
 
   function inViewport(el) {
     const r = el.getBoundingClientRect();
@@ -71,26 +72,82 @@
     );
   }
 
-  function shineOne() {
+  function shineGroup() {
     if (document.hidden) return;
+
+    // Pick a random longword seed currently in the viewport, avoiding the
+    // word we picked last tick (so it's always "a different word").
     const candidates = [];
-    for (const w of allWords) {
-      if (w === lastWord) continue;
-      if (w.classList.contains("shine")) continue;
+    for (const w of longwords) {
+      if (w === lastSeed) continue;
+      if (w.closest(".shine-group")) continue;
       if (inViewport(w)) candidates.push(w);
     }
     if (candidates.length === 0) return;
-    const pick = candidates[Math.floor(Math.random() * candidates.length)];
-    pick.dataset.text = pick.textContent;
-    pick.classList.add("shine");
-    lastWord = pick;
-    setTimeout(() => {
-      pick.classList.remove("shine");
-      delete pick.dataset.text;
-    }, SHINE_MS + 200);
+    const seed = candidates[Math.floor(Math.random() * candidates.length)];
+    lastSeed = seed;
+
+    // Look at every .word child of seed's parent — that's the line of words
+    // we can include in the group (Range.surroundContents needs them to
+    // share a parent).
+    const parent = seed.parentNode;
+    const siblings = Array.from(parent.children).filter(
+      (c) => c.classList && c.classList.contains("word")
+    );
+    const seedIdx = siblings.indexOf(seed);
+    if (seedIdx < 0) return;
+
+    const seedTop = seed.getBoundingClientRect().top;
+    const sameLine = (el) =>
+      Math.abs(el.getBoundingClientRect().top - seedTop) < 4;
+
+    // Group size: 3 or 4 words (capped by what fits on the seed's line).
+    const targetSize = 3 + Math.floor(Math.random() * 2);
+
+    // Anchor the group somewhere with the seed inside it: random offset
+    // 0–2 words before the seed.
+    const beforeOffset = Math.floor(Math.random() * 3);
+    let startIdx = seedIdx;
+    for (let i = 1; i <= beforeOffset; i++) {
+      const cand = siblings[seedIdx - i];
+      if (cand && sameLine(cand)) startIdx = seedIdx - i;
+      else break;
+    }
+
+    // Extend forward until we have targetSize words or hit a line break.
+    let endIdx = startIdx;
+    while (endIdx - startIdx + 1 < targetSize) {
+      const cand = siblings[endIdx + 1];
+      if (cand && sameLine(cand)) endIdx += 1;
+      else break;
+    }
+
+    const firstWord = siblings[startIdx];
+    const lastWord = siblings[endIdx];
+
+    const range = document.createRange();
+    try {
+      range.setStartBefore(firstWord);
+      range.setEndAfter(lastWord);
+      const wrapper = document.createElement("span");
+      wrapper.className = "shine-group";
+      wrapper.dataset.text = range.toString();
+      range.surroundContents(wrapper);
+
+      setTimeout(() => {
+        const p = wrapper.parentNode;
+        if (!p) return;
+        while (wrapper.firstChild) p.insertBefore(wrapper.firstChild, wrapper);
+        p.removeChild(wrapper);
+      }, SHINE_MS + 200);
+    } catch (e) {
+      // surroundContents throws if the range partially covers a non-text
+      // node — bail silently and try a different seed next tick.
+    }
   }
 
-  // First shine ~1s after load so the user sees it before the first interval
-  setTimeout(shineOne, 1000);
-  setInterval(shineOne, INTERVAL_MS);
+  // First shine ~1s after load so the user sees one early, then on the
+  // 3-second cadence.
+  setTimeout(shineGroup, 1000);
+  setInterval(shineGroup, INTERVAL_MS);
 })();

@@ -114,7 +114,7 @@
 .post {
   position: relative;
   z-index: 2;
-  max-width: 880px;
+  max-width: 960px;
   margin: 0 auto;
   padding: 3rem var(--gutter) 5rem;
 }
@@ -186,10 +186,10 @@
   transition: none;
 }
 .post-body > p:nth-of-type(even) {
-  margin-left: 10ch;
+  margin-left: 16ch;
 }
 
-@media (max-width: 820px) {
+@media (max-width: 920px) {
   .post-body p {
     max-width: 100%;
   }
@@ -332,32 +332,29 @@
   color: var(--accent-warm);
 }
 
-/* ---------- word-shine ----------
-   A short titanium-blue glare sweeps across a single word.
-   Base text stays in --ink; the ::after overlays the same text
-   with a clipped gradient that's transparent everywhere except a
-   bright cobalt band, then translates it across the word. */
+/* ---------- shine ----------
+   A titanium-blue glare sweeps across a small group of contiguous
+   words. The wrapper is added at runtime and uses background-clip:
+   text so the gradient is painted only on the letter shapes; the
+   non-band areas of the gradient match --ink so the surrounding
+   text appears its normal color while the bright cobalt band
+   translates across. */
 
 .word {
-  /* Plain marker — no visible style. */
+  /* Plain marker for tokenized words — no visible style. */
 }
 
-.word.shine {
-  position: relative;
+.shine-group {
   display: inline-block;
-  white-space: pre;
-}
-.word.shine::after {
-  content: attr(data-text);
-  position: absolute;
-  inset: 0;
   background-image: linear-gradient(
     105deg,
-    transparent 36%,
+    var(--ink) 0%,
+    var(--ink) 36%,
     rgba(111, 140, 240, 0.95) 47%,
     rgba(200, 220, 255, 1) 50%,
     rgba(111, 140, 240, 0.95) 53%,
-    transparent 64%
+    var(--ink) 64%,
+    var(--ink) 100%
   );
   background-size: 280% 100%;
   background-position: 140% 0;
@@ -366,20 +363,22 @@
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
-  filter: drop-shadow(0 0 6px rgba(111, 140, 240, 0.6));
-  pointer-events: none;
-  animation: word-shine 1s cubic-bezier(0.4, 0, 0.5, 1) forwards;
+  filter: drop-shadow(0 0 7px rgba(111, 140, 240, 0.5));
+  animation: shine-sweep 1.6s cubic-bezier(0.4, 0, 0.5, 1) forwards;
 }
 
-@keyframes word-shine {
+@keyframes shine-sweep {
   to {
     background-position: -140% 0;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .word.shine::after {
+  .shine-group {
     animation: none;
-    display: none;
+    background: none;
+    color: inherit;
+    -webkit-text-fill-color: inherit;
+    filter: none;
   }
 }
