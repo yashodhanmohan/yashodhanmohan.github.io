@@ -336,6 +336,8 @@ POST_HTML = """<!doctype html>
       <span>© {year} Yashodhan Mohan Bhatnagar</span>
       <span class="muted">Built quietly in Vadodara.</span>
     </footer>
+
+    <script src="/writing/shine.js" defer></script>
   </body>
 </html>
 """
