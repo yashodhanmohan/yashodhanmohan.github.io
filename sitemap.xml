@@ -8,7 +8,7 @@
   </url>
   <url>
     <loc>https://yashodhanmohan.github.io/lab/</loc>
-    <lastmod>2026-05-11</lastmod>
+    <lastmod>2026-05-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -51,6 +51,30 @@
   <url>
     <loc>https://yashodhanmohan.github.io/lab/collisions/</loc>
     <lastmod>2026-05-12</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yashodhanmohan.github.io/lab/reaction-diffusion/</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yashodhanmohan.github.io/lab/lattice/</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yashodhanmohan.github.io/lab/lissajous/</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yashodhanmohan.github.io/lab/predator-prey/</loc>
+    <lastmod>2026-05-13</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.8</priority>
   </url>
