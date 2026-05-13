@@ -46,6 +46,24 @@ LABS = [
         "title": "Predator–prey",
         "tagline": "Rabbits and foxes. A closed orbit in phase space.",
     },
+    {
+        "num": "11",
+        "slug": "double-pendulum",
+        "title": "Double pendulum",
+        "tagline": "Two arms, deterministic equations, no predictable future.",
+    },
+    {
+        "num": "12",
+        "slug": "diffraction",
+        "title": "Diffraction",
+        "tagline": "A wavefront, N slits, a screen. Watch lines sharpen.",
+    },
+    {
+        "num": "13",
+        "slug": "mandelbrot",
+        "title": "Mandelbrot",
+        "tagline": "Iterate z² + c. Drag, zoom, hover for the Julia twin.",
+    },
 ]
 
 REPO = Path(__file__).resolve().parent.parent

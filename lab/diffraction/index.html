@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Diffraction — Lab — Yashodhan Mohan Bhatnagar</title>
+    <meta
+      name="description"
+      content="A Fraunhofer diffraction-grating toy. Adjust slit count, spacing, slit width, and wavelength to watch the single-slit envelope and the N-slit interference pattern evolve."
+    />
+    <meta name="author" content="Yashodhan Mohan Bhatnagar" />
+    <meta name="keywords" content="Fraunhofer diffraction, diffraction grating, multi-slit interference, single slit, wavelength, spectrometer, sinc squared, principal maxima, interactive physics simulation" />
+    <meta name="theme-color" content="#eef0ee" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0c0e14" media="(prefers-color-scheme: dark)" />
+
+    <link rel="canonical" href="https://yashodhanmohan.github.io/lab/diffraction/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Diffraction — Lab — Yashodhan Mohan Bhatnagar" />
+    <meta property="og:description" content="Fraunhofer diffraction-grating toy. Slit count, spacing, slit width, and wavelength sliders — watch the pattern evolve from a single-slit blob to a multi-slit spectrum." />
+    <meta property="og:url" content="https://yashodhanmohan.github.io/lab/diffraction/" />
+    <meta property="og:site_name" content="Yashodhan Mohan Bhatnagar" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content="https://yashodhanmohan.github.io/lab/diffraction/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Diffraction — N-slit Fraunhofer interference pattern" />
+    <meta property="article:author" content="Yashodhan Mohan Bhatnagar" />
+    <meta property="article:section" content="Lab" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Diffraction — Lab" />
+    <meta name="twitter:description" content="Fraunhofer diffraction-grating toy with slit count, spacing, width, and wavelength sliders." />
+    <meta name="twitter:image" content="https://yashodhanmohan.github.io/lab/diffraction/og.png" />
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CreativeWork",
+      "@id": "https://yashodhanmohan.github.io/lab/diffraction/#artifact",
+      "name": "Diffraction",
+      "url": "https://yashodhanmohan.github.io/lab/diffraction/",
+      "description": "A Fraunhofer diffraction-grating toy. Adjust slit count, spacing, slit width, and wavelength to watch the interference pattern evolve.",
+      "author": { "@type": "Person", "name": "Yashodhan Mohan Bhatnagar", "url": "https://yashodhanmohan.github.io/" },
+      "keywords": "Fraunhofer diffraction, diffraction grating, multi-slit interference, wavelength, spectrometer"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://yashodhanmohan.github.io/" },
+        { "@type": "ListItem", "position": 2, "name": "Lab", "item": "https://yashodhanmohan.github.io/lab/" },
+        { "@type": "ListItem", "position": 3, "name": "Diffraction", "item": "https://yashodhanmohan.github.io/lab/diffraction/" }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <meta name="color-scheme" content="light dark" />
+
+    <link rel="preload" href="/fonts/instrument-serif-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/lab/lab.css" />
+    <link rel="stylesheet" href="/lab/diffraction/diffraction.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="orb-orbit" aria-hidden="true">
+      <div class="orb orb-a"></div>
+      <div class="orb orb-b"></div>
+    </div>
+
+    <header class="topbar">
+      <a class="mark" href="/">YMB</a>
+      <span class="status">
+        <span class="dot"></span>
+        Vadodara · IST
+      </span>
+    </header>
+
+    <main class="artifact">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/">portfolio</a>
+        <span aria-hidden="true">›</span>
+        <a href="/lab/">lab</a>
+        <span aria-hidden="true">›</span>
+        <span>diffraction</span>
+      </nav>
+
+      <h1 class="artifact-title">Diffraction<span class="end-dot">.</span></h1>
+      <p class="artifact-lede">
+        Plane-wave light hits a
+        <a
+          href="https://en.wikipedia.org/wiki/Diffraction_grating"
+          target="_blank"
+          rel="noreferrer"
+          >diffraction grating</a
+        >
+        of <em>N</em> slits and lands on a screen far away. In the
+        <a
+          href="https://en.wikipedia.org/wiki/Fraunhofer_diffraction_equation"
+          target="_blank"
+          rel="noreferrer"
+          >Fraunhofer</a
+        >
+        limit the result is a product of two
+        <a
+          href="https://en.wikipedia.org/wiki/Wave_interference"
+          target="_blank"
+          rel="noreferrer"
+          >interference</a
+        >
+        factors: a wide single-slit envelope and a sharp N-slit comb. Slide the
+        slit count up and watch the broad blob collapse into the bright,
+        narrow principal maxima a spectrometer relies on.
+      </p>
+
+      <section class="diff" aria-label="Diffraction simulator">
+        <div class="diff-board">
+          <canvas id="board" aria-label="Diffraction grating schematic and intensity pattern"></canvas>
+        </div>
+      </section>
+
+      <section class="diff-controls">
+        <div class="ctrl-row sliders">
+          <label class="row-control">
+            <span class="label-row">
+              <span>N (slits)</span>
+              <span class="value" id="NValue">4</span>
+            </span>
+            <input
+              type="range"
+              id="N"
+              min="1"
+              max="20"
+              step="1"
+              value="4"
+            />
+          </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>d (spacing)</span>
+              <span class="value" id="dValue">5.0 μm</span>
+            </span>
+            <input
+              type="range"
+              id="d"
+              min="1"
+              max="20"
+              step="0.1"
+              value="5"
+            />
+          </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>a (slit width)</span>
+              <span class="value" id="aValue">1.00 μm</span>
+            </span>
+            <input
+              type="range"
+              id="a"
+              min="0.2"
+              max="5"
+              step="0.05"
+              value="1"
+            />
+          </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>λ (wavelength)</span>
+              <span class="value" id="lambdaValue">550 nm</span>
+            </span>
+            <input
+              type="range"
+              id="lambda"
+              min="380"
+              max="780"
+              step="5"
+              value="550"
+            />
+          </label>
+        </div>
+        <div class="ctrl-row buttons">
+          <button id="mode" type="button">monochromatic</button>
+          <button id="reset" type="button">reset</button>
+        </div>
+      </section>
+
+      <section class="notes">
+        <h2>What you're looking at.</h2>
+        <p>
+          Two factors govern the pattern: a wide <em>sinc²</em> envelope from a
+          single slit of width <em>a</em>, and a sharp N-slit factor
+          <em>(sin N γ / sin γ)²</em> where <em>γ = π d sin θ / λ</em>. The
+          envelope decides which orders are visible at all; the N-slit factor
+          decides how narrow each one is. Multiply them and you get
+          <em>I(θ) = (sin β / β)² · (sin N γ / sin γ)²</em>.
+        </p>
+        <p>
+          Principal maxima fall where <em>d sin θ = m λ</em> for integer
+          <em>m</em>. Between any two adjacent principals there are
+          <em>N − 2</em> tiny secondary maxima, each roughly
+          <em>1 / N²</em> as bright as a principal. Push <em>N</em> from 2 up
+          to 20 and watch the bright fringes go from broad humps to surgical
+          lines — the limit a real grating exploits.
+        </p>
+        <p>
+          Why spectrometers use gratings: the principal angle depends on
+          <em>λ</em>, so two close wavelengths peel apart further at higher
+          orders <em>m</em>. The resolving power scales with <em>N · m</em>.
+          Flip the toggle to <em>white-light</em> and the orders past the
+          central peak fan into rainbows — chromatic dispersion, the same
+          trick behind every grating spectrometer.
+        </p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>© <span id="year">2026</span> Yashodhan Mohan Bhatnagar</span>
+      <span class="muted">Built quietly in Vadodara.</span>
+    </footer>
+
+    <script src="/lab/diffraction/diffraction.js" defer></script>
+  </body>
+</html>

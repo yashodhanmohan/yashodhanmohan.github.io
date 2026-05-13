@@ -1,0 +1,284 @@
+/* Mandelbrot lab — interactive complex-plane viewer with Julia inset. */
+
+.mb-stage {
+  margin: 0 0 2rem;
+}
+
+.mb-board {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  aspect-ratio: 1 / 1;
+  border: 1px solid var(--rule);
+  background: var(--bg);
+  overflow: hidden;
+  user-select: none;
+  touch-action: none;
+}
+
+#mb-main {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: grab;
+  image-rendering: auto;
+}
+#mb-main.mb-dragging {
+  cursor: grabbing;
+}
+
+.mb-inset {
+  position: absolute;
+  bottom: 0.6rem;
+  right: 0.6rem;
+  width: 180px;
+  height: 180px;
+  border: 1px solid var(--rule);
+  background: var(--bg);
+  pointer-events: none;
+  /* low-res internal buffer scaled up — keep it crisp-ish */
+  image-rendering: auto;
+  transition: opacity 0.2s;
+  opacity: 1;
+}
+.mb-inset.mb-hidden {
+  opacity: 0;
+}
+
+.mb-readout {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  padding: 0.35rem 0.55rem;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  pointer-events: none;
+  font-feature-settings: "tnum" 1;
+  letter-spacing: 0.02em;
+}
+.mb-readout-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+}
+.mb-readout-key {
+  color: var(--muted);
+  opacity: 0.7;
+}
+.mb-readout span:not(.mb-readout-key):not(.mb-readout-row) {
+  color: var(--ink-soft);
+}
+
+@media (max-width: 520px) {
+  .mb-inset {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+/* controls */
+
+.mb-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+}
+.mb-controls .ctrl-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+.mb-controls .ctrl-row.sliders {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+.mb-controls .row-control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.mb-controls .row-control .label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-transform: lowercase;
+  letter-spacing: 0.04em;
+}
+.mb-controls .row-control .value {
+  color: var(--ink-soft);
+  font-feature-settings: "tnum" 1;
+  text-transform: none;
+}
+
+/* slider styling — match the collisions lab */
+.mb-controls input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 14px;
+  background: transparent;
+  cursor: pointer;
+  margin: 0;
+}
+.mb-controls input[type="range"]::-webkit-slider-runnable-track {
+  height: 1px;
+  background: var(--rule);
+}
+.mb-controls input[type="range"]::-moz-range-track {
+  height: 1px;
+  background: var(--rule);
+}
+.mb-controls input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-warm);
+  margin-top: -6px;
+  border: none;
+  transition: transform 0.15s ease;
+}
+.mb-controls input[type="range"]::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-warm);
+  border: none;
+}
+.mb-controls input[type="range"]:hover::-webkit-slider-thumb {
+  transform: scale(1.25);
+}
+
+/* radio row for palette */
+.mb-radio-row {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+.mb-radio {
+  position: relative;
+  cursor: pointer;
+}
+.mb-radio input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.mb-radio span {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  color: var(--ink-soft);
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.mb-radio:hover span {
+  color: var(--accent-warm);
+  border-color: var(--accent-warm);
+}
+.mb-radio input:checked + span {
+  color: var(--accent-warm);
+  border-color: var(--accent-warm);
+  background: color-mix(in srgb, var(--accent-warm) 10%, transparent);
+}
+.mb-radio input:focus-visible + span {
+  outline: 2px solid var(--accent-warm);
+  outline-offset: 2px;
+}
+
+/* toggle */
+.mb-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  color: var(--ink-soft);
+  text-transform: lowercase;
+  letter-spacing: 0.04em;
+}
+.mb-toggle input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.mb-toggle-track {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 16px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: transparent;
+  transition: border-color 0.2s, background 0.2s;
+}
+.mb-toggle-thumb {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--muted);
+  transition: transform 0.2s ease, background 0.2s;
+}
+.mb-toggle input:checked + .mb-toggle-track {
+  border-color: var(--accent-warm);
+  background: color-mix(in srgb, var(--accent-warm) 18%, transparent);
+}
+.mb-toggle input:checked + .mb-toggle-track .mb-toggle-thumb {
+  transform: translateX(14px);
+  background: var(--accent-warm);
+}
+
+/* buttons */
+.mb-controls button {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  padding: 0.4rem 0.95rem;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+  border-radius: 999px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.mb-controls button:hover {
+  color: var(--accent-warm);
+  border-color: var(--accent-warm);
+}
+
+/* notes — same treatment as other labs */
+.notes em {
+  font-family: var(--mono);
+  font-style: normal;
+  font-size: 0.85em;
+  padding: 0.05em 0.4em;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  color: var(--ink);
+  margin: 0 0.1em;
+}

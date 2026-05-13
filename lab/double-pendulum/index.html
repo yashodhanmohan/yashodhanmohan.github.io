@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Double pendulum — Lab — Yashodhan Mohan Bhatnagar</title>
+    <meta
+      name="description"
+      content="A double pendulum hanging from a fixed pivot. Pick the starting angles, optionally spawn ghost twins offset by a tiny ε, release, and watch chaos pull them apart over the Lyapunov time."
+    />
+    <meta name="author" content="Yashodhan Mohan Bhatnagar" />
+    <meta name="keywords" content="double pendulum, chaos theory, Lyapunov time, Hamiltonian, Lagrangian, sensitivity to initial conditions, RK4, physics, interactive simulation" />
+    <meta name="theme-color" content="#eef0ee" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0c0e14" media="(prefers-color-scheme: dark)" />
+
+    <link rel="canonical" href="https://yashodhanmohan.github.io/lab/double-pendulum/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Double pendulum — Lab — Yashodhan Mohan Bhatnagar" />
+    <meta property="og:description" content="Chaos visualised. Spawn ghost twins offset by a tiny ε and watch them drift apart over the Lyapunov time." />
+    <meta property="og:url" content="https://yashodhanmohan.github.io/lab/double-pendulum/" />
+    <meta property="og:site_name" content="Yashodhan Mohan Bhatnagar" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content="https://yashodhanmohan.github.io/lab/double-pendulum/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Double pendulum — chaos visualised with ghost-twin Lyapunov divergence" />
+    <meta property="article:author" content="Yashodhan Mohan Bhatnagar" />
+    <meta property="article:section" content="Lab" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Double pendulum — Lab" />
+    <meta name="twitter:description" content="Chaos visualised. Spawn ghost twins offset by a tiny ε and watch them drift apart." />
+    <meta name="twitter:image" content="https://yashodhanmohan.github.io/lab/double-pendulum/og.png" />
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CreativeWork",
+      "@id": "https://yashodhanmohan.github.io/lab/double-pendulum/#artifact",
+      "name": "Double pendulum",
+      "url": "https://yashodhanmohan.github.io/lab/double-pendulum/",
+      "description": "An interactive double-pendulum simulator with ghost twins for visualising sensitive dependence on initial conditions.",
+      "author": { "@type": "Person", "name": "Yashodhan Mohan Bhatnagar", "url": "https://yashodhanmohan.github.io/" },
+      "keywords": "double pendulum, chaos theory, Lyapunov time, Lagrangian mechanics, RK4 integrator"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://yashodhanmohan.github.io/" },
+        { "@type": "ListItem", "position": 2, "name": "Lab", "item": "https://yashodhanmohan.github.io/lab/" },
+        { "@type": "ListItem", "position": 3, "name": "Double pendulum", "item": "https://yashodhanmohan.github.io/lab/double-pendulum/" }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <meta name="color-scheme" content="light dark" />
+
+    <link rel="preload" href="/fonts/instrument-serif-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/lab/lab.css" />
+    <link rel="stylesheet" href="/lab/double-pendulum/double-pendulum.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="orb-orbit" aria-hidden="true">
+      <div class="orb orb-a"></div>
+      <div class="orb orb-b"></div>
+    </div>
+
+    <header class="topbar">
+      <a class="mark" href="/">YMB</a>
+      <span class="status">
+        <span class="dot"></span>
+        Vadodara · IST
+      </span>
+    </header>
+
+    <main class="artifact">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/">portfolio</a>
+        <span aria-hidden="true">›</span>
+        <a href="/lab/">lab</a>
+        <span aria-hidden="true">›</span>
+        <span>double pendulum</span>
+      </nav>
+
+      <h1 class="artifact-title">Double pendulum<span class="end-dot">.</span></h1>
+      <p class="artifact-lede">
+        A
+        <a
+          href="https://en.wikipedia.org/wiki/Double_pendulum"
+          target="_blank"
+          rel="noreferrer"
+          >double pendulum</a
+        >
+        hanging from a fixed pivot — two rods, two bobs, four coupled
+        equations of motion. Pick the starting angles and release. Then
+        spawn ghost twins, each offset by a tiny <em>ε</em>, and watch
+        them track the primary for a few seconds before
+        <a
+          href="https://en.wikipedia.org/wiki/Chaos_theory"
+          target="_blank"
+          rel="noreferrer"
+          >chaos</a
+        >
+        pulls them apart. The
+        <a
+          href="https://en.wikipedia.org/wiki/Lyapunov_time"
+          target="_blank"
+          rel="noreferrer"
+          >Lyapunov time</a
+        >
+        is the rough scale on which a perturbation grows by <em>e</em>;
+        after roughly ten of them, the ghosts have forgotten where they
+        came from.
+      </p>
+
+      <section class="dp" aria-label="Double-pendulum simulator">
+        <div class="dp-board">
+          <canvas id="dpCanvas" aria-label="Double pendulum hanging from a fixed pivot"></canvas>
+        </div>
+      </section>
+
+      <section class="dp-controls">
+        <div class="ctrl-row sliders">
+          <label class="row-control">
+            <span class="label-row">
+              <span>θ₁ (top)</span>
+              <span class="value" id="theta1Value">+120 deg</span>
+            </span>
+            <input
+              type="range"
+              id="theta1"
+              min="-180"
+              max="180"
+              step="1"
+              value="120"
+            />
+          </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>θ₂ (bottom)</span>
+              <span class="value" id="theta2Value">+60 deg</span>
+            </span>
+            <input
+              type="range"
+              id="theta2"
+              min="-180"
+              max="180"
+              step="1"
+              value="60"
+            />
+          </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>m₂ / m₁</span>
+              <span class="value" id="massRatioValue">1.00×</span>
+            </span>
+            <input
+              type="range"
+              id="massRatio"
+              min="0.2"
+              max="5"
+              step="0.05"
+              value="1"
+            />
+          </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>L₂ / L₁</span>
+              <span class="value" id="lengthRatioValue">1.00×</span>
+            </span>
+            <input
+              type="range"
+              id="lengthRatio"
+              min="0.3"
+              max="3"
+              step="0.05"
+              value="1"
+            />
+          </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>damping</span>
+              <span class="value" id="dampingValue">0.0000</span>
+            </span>
+            <input
+              type="range"
+              id="damping"
+              min="0"
+              max="0.02"
+              step="0.0005"
+              value="0"
+            />
+          </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>ghosts</span>
+              <span class="value" id="ghostsValue">3</span>
+            </span>
+            <input
+              type="range"
+              id="ghosts"
+              min="0"
+              max="4"
+              step="1"
+              value="3"
+            />
+          </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>ghost ε</span>
+              <span class="value" id="epsilonValue">0.100 deg</span>
+            </span>
+            <input
+              type="range"
+              id="epsilon"
+              min="0.001"
+              max="1"
+              step="0.001"
+              value="0.1"
+            />
+          </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>g ×</span>
+              <span class="value" id="gScaleValue">1.00×</span>
+            </span>
+            <input
+              type="range"
+              id="gScale"
+              min="0.5"
+              max="2"
+              step="0.05"
+              value="1"
+            />
+          </label>
+        </div>
+        <div class="ctrl-row buttons">
+          <button id="release" type="button">release</button>
+          <button id="reset" type="button">reset</button>
+        </div>
+      </section>
+
+      <section class="notes">
+        <h2>What you're looking at.</h2>
+        <p>
+          The motion is fully deterministic — four coupled ordinary
+          differential equations in <em>θ₁</em>, <em>θ₂</em>,
+          <em>ω₁</em>, <em>ω₂</em>, dropping out of the
+          <a
+            href="https://en.wikipedia.org/wiki/Lagrangian_mechanics"
+            target="_blank"
+            rel="noreferrer"
+            >Lagrangian</a
+          >
+          for two coupled rigid rods. There is no randomness anywhere
+          in the integrator. Two pendulums started at exactly
+          <em>89.999°</em> and <em>90.000°</em> look identical for a
+          while and then completely separate; that's the chaos signature
+          in the bare equations.
+        </p>
+        <p>
+          The
+          <a
+            href="https://en.wikipedia.org/wiki/Lyapunov_time"
+            target="_blank"
+            rel="noreferrer"
+            >Lyapunov time</a
+          >
+          is the timescale over which a tiny perturbation grows by a
+          factor of <em>e</em> ≈ 2.718. For a double pendulum well
+          inside the energetic regime it's a few seconds. After about
+          ten Lyapunov times any positional information about the
+          starting state has effectively been thrown away — the ghosts
+          are wandering an attractor that the primary also lives on,
+          but their phase relative to it is random.
+        </p>
+        <p>
+          This is <em>not</em> a numerical-error artefact. Even an
+          idealised analog computer with infinitely precise components
+          would show the same divergence, because the divergence is
+          baked into the equations. RK4 with a small step buys you
+          accuracy, not stability against chaos. Crank up the
+          <em>damping</em> slider and the chaos drains away as energy
+          leaks — turn it back to zero and the ghosts fan out again.
+        </p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>© <span id="year">2026</span> Yashodhan Mohan Bhatnagar</span>
+      <span class="muted">Built quietly in Vadodara.</span>
+    </footer>
+
+    <script src="/lab/double-pendulum/double-pendulum.js" defer></script>
+  </body>
+</html>

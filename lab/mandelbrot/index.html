@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mandelbrot — Lab — Yashodhan Mohan Bhatnagar</title>
+    <meta
+      name="description"
+      content="An interactive Mandelbrot set viewer with smooth escape-time colouring. Pan and zoom the complex plane; hover any pixel to see the Julia set for that parameter c."
+    />
+    <meta name="author" content="Yashodhan Mohan Bhatnagar" />
+    <meta name="keywords" content="Mandelbrot set, Julia set, complex dynamics, fractal, escape time, smooth colouring, iterated map, complex quadratic polynomial" />
+    <meta name="theme-color" content="#eef0ee" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0c0e14" media="(prefers-color-scheme: dark)" />
+
+    <link rel="canonical" href="https://yashodhanmohan.github.io/lab/mandelbrot/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Mandelbrot — Lab — Yashodhan Mohan Bhatnagar" />
+    <meta property="og:description" content="An interactive Mandelbrot zoomer with smooth escape-time colouring and a Julia-set hover inset." />
+    <meta property="og:url" content="https://yashodhanmohan.github.io/lab/mandelbrot/" />
+    <meta property="og:site_name" content="Yashodhan Mohan Bhatnagar" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content="https://yashodhanmohan.github.io/lab/mandelbrot/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Mandelbrot — z² + c with a Julia-set hover preview" />
+    <meta property="article:author" content="Yashodhan Mohan Bhatnagar" />
+    <meta property="article:section" content="Lab" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Mandelbrot — Lab" />
+    <meta name="twitter:description" content="An interactive Mandelbrot zoomer with a Julia-set hover inset." />
+    <meta name="twitter:image" content="https://yashodhanmohan.github.io/lab/mandelbrot/og.png" />
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CreativeWork",
+      "@id": "https://yashodhanmohan.github.io/lab/mandelbrot/#artifact",
+      "name": "Mandelbrot",
+      "url": "https://yashodhanmohan.github.io/lab/mandelbrot/",
+      "description": "An interactive Mandelbrot set viewer with smooth escape-time colouring and a Julia-set hover inset.",
+      "author": { "@type": "Person", "name": "Yashodhan Mohan Bhatnagar", "url": "https://yashodhanmohan.github.io/" },
+      "keywords": "Mandelbrot set, Julia set, complex dynamics, fractal, escape time, smooth colouring"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://yashodhanmohan.github.io/" },
+        { "@type": "ListItem", "position": 2, "name": "Lab", "item": "https://yashodhanmohan.github.io/lab/" },
+        { "@type": "ListItem", "position": 3, "name": "Mandelbrot", "item": "https://yashodhanmohan.github.io/lab/mandelbrot/" }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <meta name="color-scheme" content="light dark" />
+
+    <link rel="preload" href="/fonts/instrument-serif-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/lab/lab.css" />
+    <link rel="stylesheet" href="/lab/mandelbrot/mandelbrot.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="orb-orbit" aria-hidden="true">
+      <div class="orb orb-a"></div>
+      <div class="orb orb-b"></div>
+    </div>
+
+    <header class="topbar">
+      <a class="mark" href="/">YMB</a>
+      <span class="status">
+        <span class="dot"></span>
+        Vadodara · IST
+      </span>
+    </header>
+
+    <main class="artifact">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/">portfolio</a>
+        <span aria-hidden="true">›</span>
+        <a href="/lab/">lab</a>
+        <span aria-hidden="true">›</span>
+        <span>mandelbrot</span>
+      </nav>
+
+      <h1 class="artifact-title">Mandelbrot<span class="end-dot">.</span></h1>
+      <p class="artifact-lede">
+        The
+        <a
+          href="https://en.wikipedia.org/wiki/Mandelbrot_set"
+          target="_blank"
+          rel="noreferrer"
+          >Mandelbrot set</a
+        >
+        of the
+        <a
+          href="https://en.wikipedia.org/wiki/Complex_quadratic_polynomial"
+          target="_blank"
+          rel="noreferrer"
+          >complex quadratic map</a
+        >
+        <em>z ↦ z² + c</em>, rendered with smooth escape-time colouring.
+        Drag to pan, scroll or use the buttons to zoom — there's structure all
+        the way down. Hover any pixel and the inset shows the
+        <a
+          href="https://en.wikipedia.org/wiki/Julia_set"
+          target="_blank"
+          rel="noreferrer"
+          >Julia set</a
+        >
+        for that <em>c</em>.
+      </p>
+
+      <section class="mb-stage" aria-label="Mandelbrot viewer">
+        <div class="mb-board">
+          <canvas id="mb-main" aria-label="Mandelbrot set viewer"></canvas>
+          <canvas id="mb-julia" class="mb-inset" aria-label="Julia set preview at cursor"></canvas>
+          <div class="mb-readout" id="mb-readout" aria-hidden="true">
+            <span class="mb-readout-row"><span class="mb-readout-key">c</span><span id="mb-c">—</span></span>
+            <span class="mb-readout-row"><span class="mb-readout-key">zoom</span><span id="mb-zoom">1×</span></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="mb-controls">
+        <div class="ctrl-row sliders">
+          <label class="row-control">
+            <span class="label-row">
+              <span>max iter</span>
+              <span class="value" id="mb-iterValue">500</span>
+            </span>
+            <input
+              type="range"
+              id="mb-iter"
+              min="100"
+              max="2000"
+              step="50"
+              value="500"
+            />
+          </label>
+
+          <div class="row-control mb-palette-control">
+            <span class="label-row">
+              <span>palette</span>
+              <span class="value" id="mb-paletteValue">cobalt</span>
+            </span>
+            <div class="mb-radio-row" role="radiogroup" aria-label="palette">
+              <label class="mb-radio">
+                <input type="radio" name="mb-palette" value="cobalt" checked />
+                <span>cobalt</span>
+              </label>
+              <label class="mb-radio">
+                <input type="radio" name="mb-palette" value="fire" />
+                <span>fire</span>
+              </label>
+              <label class="mb-radio">
+                <input type="radio" name="mb-palette" value="mono" />
+                <span>mono</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="row-control mb-toggle-control">
+            <span class="label-row">
+              <span>julia preview</span>
+              <span class="value" id="mb-juliaValue">on</span>
+            </span>
+            <label class="mb-toggle">
+              <input type="checkbox" id="mb-juliaToggle" checked />
+              <span class="mb-toggle-track"><span class="mb-toggle-thumb"></span></span>
+              <span class="mb-toggle-label">hover preview</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="ctrl-row buttons">
+          <button id="mb-zoomIn" type="button">zoom in</button>
+          <button id="mb-zoomOut" type="button">zoom out</button>
+          <button id="mb-reset" type="button">reset view</button>
+        </div>
+      </section>
+
+      <section class="notes">
+        <h2>What you're looking at.</h2>
+        <p>
+          A complex number <em>c</em> belongs to the Mandelbrot set iff the
+          orbit of 0 under <em>z ↦ z² + c</em> stays bounded forever.
+          Everywhere outside the set, the colour encodes how
+          <em>fast</em> that orbit escapes to infinity — the smoother the
+          gradient, the slower the escape near that direction. The
+          <em>n + 1 − log₂ log|z|</em> smoothing turns the integer escape
+          count into a continuous value, which is why the bands look
+          continuous rather than stair-stepped.
+        </p>
+        <p>
+          The Mandelbrot and Julia sets are joined at the hip: the Mandelbrot
+          set is precisely the locus of <em>c</em> for which the corresponding
+          Julia set is connected. Pixels inside the main cardioid produce
+          simple filled-disc Julias; pixels on the boundary produce
+          delicate dendritic Julias that look like the Mandelbrot itself
+          locally; pixels far outside fragment into a Cantor-dust of
+          disconnected points — totally disconnected. Hover the cursor
+          across the boundary in the inset and watch the topology change.
+        </p>
+        <p>
+          The set's boundary has Hausdorff dimension 2 — wrinkled enough
+          that, in a measure-theoretic sense, it fills the plane while still
+          enclosing zero area. Pick any point on the edge and zoom; you will
+          never run out of structure (until double-precision floats start
+          quantising the plane around 10¹³ zoom). The deep eddies, mini-brots
+          and seahorse valleys are all the same equation, just iterated on
+          smaller and smaller windows.
+        </p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>© <span id="year">2026</span> Yashodhan Mohan Bhatnagar</span>
+      <span class="muted">Built quietly in Vadodara.</span>
+    </footer>
+
+    <script src="/lab/mandelbrot/mandelbrot.js" defer></script>
+  </body>
+</html>
