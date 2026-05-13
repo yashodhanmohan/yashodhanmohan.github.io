@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lissajous — Lab — Yashodhan Mohan Bhatnagar</title>
+    <meta
+      name="description"
+      content="A Lissajous-figure plotter. Two perpendicular oscillations meet on a square; turn the frequency knobs and watch the curve open, close, knot, and — for irrational ratios — quietly fill the plane."
+    />
+    <meta name="author" content="Yashodhan Mohan Bhatnagar" />
+    <meta name="keywords" content="Lissajous curve, Bowditch curve, harmonic motion, continued fraction, ergodic trajectory, oscilloscope, parametric plot, interactive simulation" />
+    <meta name="theme-color" content="#eef0ee" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0c0e14" media="(prefers-color-scheme: dark)" />
+
+    <link rel="canonical" href="https://yashodhanmohan.github.io/lab/lissajous/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Lissajous — Lab — Yashodhan Mohan Bhatnagar" />
+    <meta property="og:description" content="A Lissajous-figure plotter. Two perpendicular oscillations; turn the frequency knobs and watch the curve open, close, knot." />
+    <meta property="og:url" content="https://yashodhanmohan.github.io/lab/lissajous/" />
+    <meta property="og:site_name" content="Yashodhan Mohan Bhatnagar" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content="https://yashodhanmohan.github.io/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Yashodhan Mohan Bhatnagar — Engineer" />
+    <meta property="article:author" content="Yashodhan Mohan Bhatnagar" />
+    <meta property="article:section" content="Lab" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Lissajous — Lab" />
+    <meta name="twitter:description" content="A Lissajous-figure plotter. Two perpendicular oscillations; turn the frequency knobs." />
+    <meta name="twitter:image" content="https://yashodhanmohan.github.io/og-image.png" />
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CreativeWork",
+      "@id": "https://yashodhanmohan.github.io/lab/lissajous/#artifact",
+      "name": "Lissajous",
+      "url": "https://yashodhanmohan.github.io/lab/lissajous/",
+      "description": "A Lissajous-figure plotter. Two perpendicular oscillations with frequency and phase sliders; rational ratios close the curve, irrational ones fill the square.",
+      "author": { "@type": "Person", "name": "Yashodhan Mohan Bhatnagar", "url": "https://yashodhanmohan.github.io/" },
+      "keywords": "Lissajous curve, harmonic motion, continued fraction, ergodic trajectory, oscilloscope, parametric plot"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://yashodhanmohan.github.io/" },
+        { "@type": "ListItem", "position": 2, "name": "Lab", "item": "https://yashodhanmohan.github.io/lab/" },
+          { "@type": "ListItem", "position": 3, "name": "Lissajous", "item": "https://yashodhanmohan.github.io/lab/lissajous/" }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <meta name="color-scheme" content="light dark" />
+
+    <link rel="preload" href="/fonts/instrument-serif-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/lab/lab.css" />
+    <link rel="stylesheet" href="/lab/lissajous/lissajous.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="orb-orbit" aria-hidden="true">
+      <div class="orb orb-a"></div>
+      <div class="orb orb-b"></div>
+    </div>
+
+    <header class="topbar">
+      <a class="mark" href="/">YMB</a>
+      <span class="status">
+        <span class="dot"></span>
+        Vadodara · IST
+      </span>
+    </header>
+
+    <main class="artifact">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/">portfolio</a>
+        <span aria-hidden="true">›</span>
+        <a href="/lab/">lab</a>
+        <span aria-hidden="true">›</span>
+        <span>lissajous</span>
+      </nav>
+
+      <h1 class="artifact-title">Lissajous<span class="end-dot">.</span></h1>
+      <p class="artifact-lede">
+        A plotter for
+        <a
+          href="https://en.wikipedia.org/wiki/Lissajous_curve"
+          target="_blank"
+          rel="noreferrer"
+          >Lissajous curves</a
+        >. Two perpendicular oscillations — <em>x = sin(a·t + φ)</em> and
+        <em>y = sin(b·t)</em> — drawing on the same square. Turn the
+        <em>a</em> knob slowly and watch the figure breathe: at rational
+        ratios it closes into a knot or a pretzel; in between it walks an
+        endless dense path, the simplest visible
+        <a
+          href="https://en.wikipedia.org/wiki/Resonance"
+          target="_blank"
+          rel="noreferrer"
+          >resonance</a
+        >
+        of two clocks. The readout shows the live
+        <a
+          href="https://en.wikipedia.org/wiki/Continued_fraction"
+          target="_blank"
+          rel="noreferrer"
+          >continued-fraction</a
+        >
+        expansion of <em>a/b</em>, which is how the curve's geometry talks
+        back to its arithmetic.
+      </p>
+
+      <section class="liss" aria-label="Lissajous plotter">
+        <div class="liss-board">
+          <canvas id="board" aria-label="Lissajous figure"></canvas>
+        </div>
+        <aside class="liss-readout" aria-label="Live readout">
+          <div class="readout-block">
+            <span class="ctrl-label">ratio</span>
+            <div class="readout-line" id="ratioLine">3.000 : 2.000</div>
+          </div>
+          <div class="readout-block">
+            <span class="ctrl-label">reduced</span>
+            <div class="readout-line" id="reducedLine">3/2</div>
+          </div>
+          <div class="readout-block">
+            <span class="ctrl-label">continued fraction of a/b</span>
+            <div class="readout-line" id="cfLine">[1; 2]</div>
+          </div>
+          <div class="readout-block">
+            <span class="ctrl-label">closes after</span>
+            <div class="readout-line" id="closeLine">2 x-periods, 3 y-periods</div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="liss-controls">
+        <div class="ctrl-row sliders">
+          <div class="row-control">
+            <label class="label-row" for="a">
+              <span>a (x-freq)</span>
+              <span class="value" id="aValue">3.000</span>
+            </label>
+            <input
+              type="range"
+              id="a"
+              min="1"
+              max="10"
+              step="0.01"
+              value="3"
+            />
+            <span class="snap-chip">
+              <input type="checkbox" id="aSnap" />
+              <label for="aSnap">snap</label>
+            </span>
+          </div>
+          <div class="row-control">
+            <label class="label-row" for="b">
+              <span>b (y-freq)</span>
+              <span class="value" id="bValue">2.000</span>
+            </label>
+            <input
+              type="range"
+              id="b"
+              min="1"
+              max="10"
+              step="0.01"
+              value="2"
+            />
+            <span class="snap-chip">
+              <input type="checkbox" id="bSnap" />
+              <label for="bSnap">snap</label>
+            </span>
+          </div>
+          <div class="row-control">
+            <label class="label-row" for="phase">
+              <span>phase φ</span>
+              <span class="value" id="phaseValue">1.57</span>
+            </label>
+            <input
+              type="range"
+              id="phase"
+              min="0"
+              max="6.2832"
+              step="0.01"
+              value="1.5708"
+            />
+          </div>
+          <div class="row-control">
+            <label class="label-row" for="trail">
+              <span>trail length</span>
+              <span class="value" id="trailValue">800 pts</span>
+            </label>
+            <input
+              type="range"
+              id="trail"
+              min="60"
+              max="4000"
+              step="20"
+              value="800"
+            />
+          </div>
+        </div>
+        <div class="ctrl-row buttons">
+          <button id="playPause" type="button">pause</button>
+          <button id="clear" type="button">clear</button>
+        </div>
+      </section>
+
+      <section class="notes">
+        <h2>What you're looking at.</h2>
+        <p>
+          Two harmonic motions, perpendicular and independent:
+          <em>x = sin(a·t + φ)</em>, <em>y = sin(b·t)</em>. Plot one against
+          the other and the pen traces a
+          <a
+            href="https://en.wikipedia.org/wiki/Lissajous_curve"
+            target="_blank"
+            rel="noreferrer"
+            >Lissajous figure</a
+          >. When <em>a/b</em> is rational — say <em>p/q</em> in lowest
+          terms — the curve closes after <em>q</em> periods of x and
+          <em>p</em> periods of y, and you get one of the canonical shapes:
+          the figure-eight (1:2), the pretzel (2:3), the lattice of bumps
+          (3:4). The reduced fraction in the readout tells you exactly how
+          many times the pen crosses each axis before retracing itself.
+        </p>
+        <p>
+          When <em>a/b</em> is irrational the curve never closes. Its orbit
+          on the (x, y) torus is dense — given enough time it passes
+          arbitrarily close to every point of the square. This is the
+          simplest visual of an
+          <a
+            href="https://en.wikipedia.org/wiki/Ergodicity"
+            target="_blank"
+            rel="noreferrer"
+            >ergodic</a
+          >
+          trajectory: the long-run space-average equals the time-average,
+          and "long run" is the only thing that matters. Drag <em>a</em> by
+          a few hundredths off an integer and watch the pretzel slowly
+          rotate into a fuzzy carpet.
+        </p>
+        <p>
+          Engineering aside: dual-channel oscilloscopes once used Lissajous
+          figures to measure unknown frequencies — feed the unknown signal
+          into x, a calibrated reference into y, then tune the reference
+          until the figure stops drifting and locks closed. The
+          continued-fraction expansion under the canvas is more than
+          ornament: its
+          <a
+            href="https://en.wikipedia.org/wiki/Continued_fraction#Best_rational_approximations"
+            target="_blank"
+            rel="noreferrer"
+            >convergents</a
+          >
+          are, in a precise sense, the best rational approximations to
+          <em>a/b</em> — the same approximations a patient oscilloscope
+          operator would have stumbled into by hand.
+        </p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>© <span id="year">2026</span> Yashodhan Mohan Bhatnagar</span>
+      <span class="muted">Built quietly in Vadodara.</span>
+    </footer>
+
+    <script src="/lab/lissajous/lissajous.js" defer></script>
+  </body>
+</html>

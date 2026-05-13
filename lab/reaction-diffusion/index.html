@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Reaction–diffusion — Lab — Yashodhan Mohan Bhatnagar</title>
+    <meta
+      name="description"
+      content="A Gray–Scott reaction–diffusion sandbox. Paint seeds onto a toroidal grid, slide the feed and kill rates, watch spots, stripes, mitosing blobs, and U-skate solitons emerge from two equations."
+    />
+    <meta name="author" content="Yashodhan Mohan Bhatnagar" />
+    <meta name="keywords" content="reaction-diffusion, Gray-Scott, Turing pattern, morphogenesis, partial differential equations, interactive simulation, emergence" />
+    <meta name="theme-color" content="#eef0ee" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0c0e14" media="(prefers-color-scheme: dark)" />
+
+    <link rel="canonical" href="https://yashodhanmohan.github.io/lab/reaction-diffusion/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Reaction–diffusion — Lab — Yashodhan Mohan Bhatnagar" />
+    <meta property="og:description" content="A Gray–Scott sandbox. Paint seeds, slide feed and kill rates, watch Turing patterns emerge from two equations." />
+    <meta property="og:url" content="https://yashodhanmohan.github.io/lab/reaction-diffusion/" />
+    <meta property="og:site_name" content="Yashodhan Mohan Bhatnagar" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content="https://yashodhanmohan.github.io/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Yashodhan Mohan Bhatnagar — Engineer" />
+    <meta property="article:author" content="Yashodhan Mohan Bhatnagar" />
+    <meta property="article:section" content="Lab" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Reaction–diffusion — Lab" />
+    <meta name="twitter:description" content="A Gray–Scott sandbox. Paint seeds, slide feed and kill rates, watch Turing patterns emerge." />
+    <meta name="twitter:image" content="https://yashodhanmohan.github.io/og-image.png" />
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CreativeWork",
+      "@id": "https://yashodhanmohan.github.io/lab/reaction-diffusion/#artifact",
+      "name": "Reaction–diffusion",
+      "url": "https://yashodhanmohan.github.io/lab/reaction-diffusion/",
+      "description": "A Gray–Scott reaction–diffusion sandbox. Paint seeds onto a toroidal grid, slide the feed and kill rates, watch Turing patterns emerge.",
+      "author": { "@type": "Person", "name": "Yashodhan Mohan Bhatnagar", "url": "https://yashodhanmohan.github.io/" },
+      "keywords": "reaction-diffusion, Gray-Scott, Turing pattern, morphogenesis, emergence, partial differential equations"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://yashodhanmohan.github.io/" },
+        { "@type": "ListItem", "position": 2, "name": "Lab", "item": "https://yashodhanmohan.github.io/lab/" },
+        { "@type": "ListItem", "position": 3, "name": "Reaction–diffusion", "item": "https://yashodhanmohan.github.io/lab/reaction-diffusion/" }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <meta name="color-scheme" content="light dark" />
+
+    <link rel="preload" href="/fonts/instrument-serif-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/lab/lab.css" />
+    <link rel="stylesheet" href="/lab/reaction-diffusion/reaction-diffusion.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="orb-orbit" aria-hidden="true">
+      <div class="orb orb-a"></div>
+      <div class="orb orb-b"></div>
+    </div>
+
+    <header class="topbar">
+      <a class="mark" href="/">YMB</a>
+      <span class="status">
+        <span class="dot"></span>
+        Vadodara · IST
+      </span>
+    </header>
+
+    <main class="artifact">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/">portfolio</a>
+        <span aria-hidden="true">›</span>
+        <a href="/lab/">lab</a>
+        <span aria-hidden="true">›</span>
+        <span>reaction–diffusion</span>
+      </nav>
+
+      <h1 class="artifact-title">Reaction–diffusion<span class="end-dot">.</span></h1>
+      <p class="artifact-lede">
+        A
+        <a
+          href="https://en.wikipedia.org/wiki/Reaction%E2%80%93diffusion_system"
+          target="_blank"
+          rel="noreferrer"
+          >reaction–diffusion system</a
+        >
+        on a wrap-around grid. Two chemicals: <em>u</em> is fed in everywhere at
+        rate <em>f</em>; <em>v</em> consumes <em>u</em> and is itself decayed at
+        rate <em>f + k</em>; both diffuse. This is the
+        <a
+          href="https://en.wikipedia.org/wiki/Reaction%E2%80%93diffusion_system#The_Gray%E2%80%93Scott_model"
+          target="_blank"
+          rel="noreferrer"
+          >Gray–Scott model</a
+        >, and tiny shifts in <em>(f, k)</em> swing it between
+        <a
+          href="https://en.wikipedia.org/wiki/Turing_pattern"
+          target="_blank"
+          rel="noreferrer"
+          >Turing patterns</a
+        >
+        — spots, stripes, mitosing blobs, drifting solitons. Click and drag to
+        paint <em>v</em> seeds; slide the rates; watch.
+      </p>
+
+      <section class="rd" aria-label="Reaction–diffusion simulator">
+        <div class="rd-board">
+          <canvas
+            id="board"
+            width="200"
+            height="200"
+            aria-label="Reaction–diffusion grid; click and drag to paint seeds"
+          ></canvas>
+        </div>
+        <aside class="rd-side" aria-label="Phase map">
+          <div class="rd-phase-map">
+            <span class="ctrl-label">f–k space</span>
+            <canvas
+              id="phaseMap"
+              width="280"
+              height="180"
+              aria-label="Position in feed–kill parameter space"
+            ></canvas>
+            <p class="rd-phase-hint">
+              your <em>(f, k)</em> against the named regimes
+            </p>
+          </div>
+        </aside>
+      </section>
+
+      <section class="rd-controls">
+        <div class="ctrl-row sliders">
+          <label class="row-control">
+            <span class="label-row">
+              <span>f (feed)</span>
+              <span class="value" id="fValue">0.0367</span>
+            </span>
+            <input
+              type="range"
+              id="f"
+              min="0.010"
+              max="0.080"
+              step="0.001"
+              value="0.0367"
+            />
+          </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>k (kill)</span>
+              <span class="value" id="kValue">0.0649</span>
+            </span>
+            <input
+              type="range"
+              id="k"
+              min="0.040"
+              max="0.075"
+              step="0.001"
+              value="0.0649"
+            />
+          </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>brush</span>
+              <span class="value" id="brushValue">8 px</span>
+            </span>
+            <input
+              type="range"
+              id="brush"
+              min="3"
+              max="20"
+              step="1"
+              value="8"
+            />
+          </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>speed</span>
+              <span class="value" id="speedValue">10×</span>
+            </span>
+            <input
+              type="range"
+              id="speed"
+              min="1"
+              max="20"
+              step="1"
+              value="10"
+            />
+          </label>
+        </div>
+
+        <div class="ctrl-row buttons">
+          <button id="pause" type="button">pause</button>
+          <button id="clear" type="button">clear</button>
+        </div>
+
+        <div class="rd-presets ctrl-row">
+          <span class="ctrl-label">presets</span>
+          <button type="button" data-preset="spots" data-f="0.030" data-k="0.062">spots</button>
+          <button type="button" data-preset="stripes" data-f="0.022" data-k="0.051">stripes</button>
+          <button type="button" data-preset="mitosis" data-f="0.0367" data-k="0.0649">mitosis</button>
+          <button type="button" data-preset="coral" data-f="0.055" data-k="0.062">coral</button>
+          <button type="button" data-preset="u-skate" data-f="0.062" data-k="0.0609">u-skate</button>
+        </div>
+      </section>
+
+      <section class="notes">
+        <h2>What you're looking at.</h2>
+        <p>
+          Two equations, repeated for every cell on a 200×200 torus. The feed
+          term <em>f·(1 − u)</em> tops <em>u</em> back up toward 1 wherever it's
+          depleted. The reaction <em>u·v²</em> burns <em>u</em> into <em>v</em>,
+          and the kill term <em>(f + k)·v</em> drains <em>v</em> away. The two
+          diffusion coefficients differ — <em>v</em> spreads more slowly than
+          <em>u</em> — and that asymmetry, plus the autocatalytic <em>v²</em>,
+          is what keeps patterns from washing out into a flat equilibrium.
+        </p>
+        <p>
+          The named regimes all live in a thin sliver of <em>(f, k)</em> space.
+          Move <em>f</em> up at moderate <em>k</em> and isolated spots replicate
+          by binary fission — the <em>mitosis</em> regime. Pull <em>k</em> down
+          and the spots merge into <em>stripes</em> and labyrinths. Out near
+          <em>f ≈ 0.062, k ≈ 0.0609</em> live the <em>U-skate</em> solitons —
+          self-propelled blobs that glide across the grid without dispersing,
+          like the gliders in Conway's Life. Push <em>f</em> further and you
+          get the branching <em>coral</em> regime.
+        </p>
+        <p>
+          Alan Turing's 1952 paper proposed exactly this mechanism — two
+          chemicals, different diffusion rates, a nonlinear reaction — as the
+          origin of biological pattern: leopard spots, zebra stripes, the
+          regular spacing of hair follicles, the branching of lungs. No
+          designer, no template; just diffusion and chemistry, applied
+          uniformly, producing structure. That a few lines of math on a wrap-
+          around grid can reach for the same answer is the small miracle this
+          page is trying to demonstrate.
+        </p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>© <span id="year">2026</span> Yashodhan Mohan Bhatnagar</span>
+      <span class="muted">Built quietly in Vadodara.</span>
+    </footer>
+
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+    <script src="/lab/reaction-diffusion/reaction-diffusion.js" defer></script>
+  </body>
+</html>

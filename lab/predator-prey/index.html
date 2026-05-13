@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Predator–prey — Lab — Yashodhan Mohan Bhatnagar</title>
+    <meta
+      name="description"
+      content="A Lotka–Volterra predator-prey simulator. Two coupled ODEs, a meadow of rabbits and foxes, and a phase-plane plot tracing the closed orbit. Add noise and watch structural stability break."
+    />
+    <meta name="author" content="Yashodhan Mohan Bhatnagar" />
+    <meta name="keywords" content="Lotka-Volterra, predator-prey, phase plane, ODE, RK4, neutral stability, structural stability, ecology, interactive simulation" />
+    <meta name="theme-color" content="#eef0ee" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0c0e14" media="(prefers-color-scheme: dark)" />
+
+    <link rel="canonical" href="https://yashodhanmohan.github.io/lab/predator-prey/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Predator–prey — Lab — Yashodhan Mohan Bhatnagar" />
+    <meta property="og:description" content="A Lotka–Volterra predator-prey simulator. Coupled ODEs, a meadow of rabbits and foxes, and a phase-plane plot of the orbit." />
+    <meta property="og:url" content="https://yashodhanmohan.github.io/lab/predator-prey/" />
+    <meta property="og:site_name" content="Yashodhan Mohan Bhatnagar" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content="https://yashodhanmohan.github.io/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Yashodhan Mohan Bhatnagar — Engineer" />
+    <meta property="article:author" content="Yashodhan Mohan Bhatnagar" />
+    <meta property="article:section" content="Lab" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Predator–prey — Lab" />
+    <meta name="twitter:description" content="A Lotka–Volterra predator-prey simulator with a meadow and a phase-plane plot." />
+    <meta name="twitter:image" content="https://yashodhanmohan.github.io/og-image.png" />
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CreativeWork",
+      "@id": "https://yashodhanmohan.github.io/lab/predator-prey/#artifact",
+      "name": "Predator–prey",
+      "url": "https://yashodhanmohan.github.io/lab/predator-prey/",
+      "description": "A Lotka–Volterra predator-prey simulator. Coupled ODEs, a meadow of rabbits and foxes, and a phase-plane plot of the orbit.",
+      "author": { "@type": "Person", "name": "Yashodhan Mohan Bhatnagar", "url": "https://yashodhanmohan.github.io/" },
+      "keywords": "Lotka-Volterra, predator-prey, phase plane, ODE, RK4, neutral stability, structural stability"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://yashodhanmohan.github.io/" },
+        { "@type": "ListItem", "position": 2, "name": "Lab", "item": "https://yashodhanmohan.github.io/lab/" },
+          { "@type": "ListItem", "position": 3, "name": "Predator–prey", "item": "https://yashodhanmohan.github.io/lab/predator-prey/" }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <meta name="color-scheme" content="light dark" />
+
+    <link rel="preload" href="/fonts/instrument-serif-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/lab/lab.css" />
+    <link rel="stylesheet" href="/lab/predator-prey/predator-prey.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="orb-orbit" aria-hidden="true">
+      <div class="orb orb-a"></div>
+      <div class="orb orb-b"></div>
+    </div>
+
+    <header class="topbar">
+      <a class="mark" href="/">YMB</a>
+      <span class="status">
+        <span class="dot"></span>
+        Vadodara · IST
+      </span>
+    </header>
+
+    <main class="artifact">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/">portfolio</a>
+        <span aria-hidden="true">›</span>
+        <a href="/lab/">lab</a>
+        <span aria-hidden="true">›</span>
+        <span>predator–prey</span>
+      </nav>
+
+      <h1 class="artifact-title">Predator–prey<span class="end-dot">.</span></h1>
+      <p class="artifact-lede">
+        The
+        <a
+          href="https://en.wikipedia.org/wiki/Lotka%E2%80%93Volterra_equations"
+          target="_blank"
+          rel="noreferrer"
+          >Lotka–Volterra equations</a
+        >
+        are the simplest model of two species locked in a feedback loop:
+        rabbits breed, foxes eat them, foxes starve without food. Drag the
+        sliders to change birth and death rates and watch the
+        <a
+          href="https://en.wikipedia.org/wiki/Phase_plane"
+          target="_blank"
+          rel="noreferrer"
+          >phase plane</a
+        >
+        trace a closed orbit. The orbits are <em>neutrally</em> stable — flip
+        on the noise slider and you see
+        <a
+          href="https://en.wikipedia.org/wiki/Structural_stability"
+          target="_blank"
+          rel="noreferrer"
+          >structural stability</a
+        >
+        fail in real time: the trajectory drifts across orbits and, eventually,
+        the meadow empties out.
+      </p>
+
+      <section class="pp-sim" aria-label="Predator-prey simulator">
+        <div class="pp-board">
+          <div class="pp-canvas-wrap">
+            <span class="pp-cap">meadow</span>
+            <canvas id="meadow" class="pp-meadow" aria-label="Meadow: rabbits and foxes"></canvas>
+          </div>
+          <div class="pp-canvas-wrap">
+            <span class="pp-cap">phase plane (prey × predator)</span>
+            <canvas id="phase" class="pp-phase" aria-label="Phase plane: prey vs predator"></canvas>
+          </div>
+        </div>
+
+        <aside class="pp-readout" aria-label="Live state">
+          <div class="stats-block live-block">
+            <span class="ctrl-label">live</span>
+            <div class="stat-row">
+              <span class="stat-key">x (prey)</span>
+              <span class="stat-val" id="xLive">—</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-key">y (pred)</span>
+              <span class="stat-val" id="yLive">—</span>
+            </div>
+          </div>
+          <div class="stats-block">
+            <span class="ctrl-label">fixed point</span>
+            <div class="stat-row">
+              <span class="stat-key">x*</span>
+              <span class="stat-val" id="xStar">—</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-key">y*</span>
+              <span class="stat-val" id="yStar">—</span>
+            </div>
+          </div>
+          <div class="stats-block">
+            <span class="ctrl-label">period (σ=0)</span>
+            <div class="stat-row">
+              <span class="stat-key">T</span>
+              <span class="stat-val" id="tPeriod">—</span>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="pp-controls">
+        <div class="ctrl-row sliders">
+          <label class="row-control prey-label">
+            <span class="label-row">
+              <span>α (prey birth)</span>
+              <span class="value" id="alphaValue">1.10</span>
+            </span>
+            <input type="range" id="alpha" min="0.10" max="2.00" step="0.01" value="1.10" />
+          </label>
+          <label class="row-control pred-label">
+            <span class="label-row">
+              <span>β (predation)</span>
+              <span class="value" id="betaValue">0.040</span>
+            </span>
+            <input type="range" id="beta" min="0.010" max="0.200" step="0.001" value="0.040" />
+          </label>
+          <label class="row-control pred-label">
+            <span class="label-row">
+              <span>δ (pred growth)</span>
+              <span class="value" id="deltaValue">0.020</span>
+            </span>
+            <input type="range" id="delta" min="0.005" max="0.050" step="0.001" value="0.020" />
+          </label>
+          <label class="row-control prey-label">
+            <span class="label-row">
+              <span>γ (pred death)</span>
+              <span class="value" id="gammaValue">0.40</span>
+            </span>
+            <input type="range" id="gamma" min="0.10" max="2.00" step="0.01" value="0.40" />
+          </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>noise σ</span>
+              <span class="value" id="sigmaValue">0.00</span>
+            </span>
+            <input type="range" id="sigma" min="0.00" max="0.50" step="0.01" value="0.00" />
+          </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>speed</span>
+              <span class="value" id="speedValue">1.00×</span>
+            </span>
+            <input type="range" id="speed" min="0.25" max="4.00" step="0.05" value="1.00" />
+          </label>
+        </div>
+        <div class="ctrl-row buttons">
+          <button id="pause" type="button">pause</button>
+          <button id="reset" type="button">reset</button>
+          <button id="preset" type="button" class="preset-chip">hare/lynx preset</button>
+        </div>
+      </section>
+
+      <section class="notes">
+        <h2>What you're looking at.</h2>
+        <p>
+          Two coupled ODEs: <em>ẋ = αx − βxy</em> says prey
+          grow exponentially on their own, but get eaten in proportion to how
+          often a predator runs into one (the <em>xy</em> encounter term).
+          And <em>ẏ = δxy − γy</em> says predators turn eaten prey into more
+          predators, but die off without food. The non-trivial fixed point is
+          at <em>(γ/δ, α/β)</em>; small perturbations orbit around it with
+          linear-theory period <em>T = 2π/√(αγ)</em>.
+        </p>
+        <p>
+          Here's the big surprise: those orbits are <em>neutrally</em> stable.
+          They neither spiral in to the fixed point nor spiral out — every
+          closed orbit is a valid steady state, parametrised by initial
+          conditions. Move a slider and the system jumps to a <em>different</em>
+          closed orbit at a different radius. It does not relax back to the
+          "right" one. That's a property of the model, not a numerical bug —
+          which is why this lab uses
+          <a
+            href="https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods"
+            target="_blank"
+            rel="noreferrer"
+            >RK4</a
+          >
+          rather than forward Euler (which would visibly spiral outward and
+          fake an instability that isn't really there).
+        </p>
+        <p>
+          Now slide noise σ above zero. The trajectory drifts across orbits, a
+          stochastic random walk in the conserved quantity. Given enough time
+          it will brush against an axis and one species crashes to extinction
+          — the model has no floor to catch it. That fragility is the
+          original critique of Lotka–Volterra as a real ecological model: real
+          populations have density-dependent terms (logistic growth,
+          saturation in predation) that turn the neutral orbit into a proper
+          attractor.
+        </p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>© <span id="year">2026</span> Yashodhan Mohan Bhatnagar</span>
+      <span class="muted">Built quietly in Vadodara.</span>
+    </footer>
+
+    <script src="/lab/predator-prey/predator-prey.js" defer></script>
+  </body>
+</html>

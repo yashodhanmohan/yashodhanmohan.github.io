@@ -1,0 +1,216 @@
+/* Reaction–diffusion lab — Gray–Scott on a torus.
+   Class names are .rd-* prefixed to namespace this artifact. */
+
+.rd {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 2.5rem;
+  align-items: start;
+  margin: 0 0 2rem;
+}
+
+.rd-board {
+  min-width: 0;
+  aspect-ratio: 1 / 1;
+  border: 1px solid var(--rule);
+  background: var(--bg-deep);
+  position: relative;
+}
+.rd-board canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* The simulation buffer is only 200×200; let the browser nearest-neighbor
+     scale it to fill the container without smoothing the chemistry away. */
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  /* Stop touch-drag from scrolling the page while painting. */
+  touch-action: none;
+  cursor: crosshair;
+}
+
+/* phase map column */
+.rd-side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-self: stretch;
+}
+.rd-phase-map {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.rd-phase-map .ctrl-label {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  color: var(--muted);
+  text-transform: lowercase;
+  letter-spacing: 0.06em;
+}
+.rd-phase-map canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 280 / 180;
+  border: 1px solid var(--rule);
+  background: transparent;
+}
+.rd-phase-hint {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.88rem;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.4;
+}
+.rd-phase-hint em {
+  font-family: var(--mono);
+  font-style: normal;
+  font-size: 0.85em;
+  padding: 0.05em 0.35em;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  color: var(--ink);
+}
+
+@media (max-width: 820px) {
+  .rd {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+}
+
+/* shared control conventions (mirrors collisions) */
+
+.rd-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+}
+.ctrl-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+.ctrl-row.sliders {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 1.5rem;
+}
+.row-control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.row-control .label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-transform: lowercase;
+  letter-spacing: 0.04em;
+}
+.row-control .value {
+  color: var(--ink-soft);
+  font-feature-settings: "tnum" 1;
+  text-transform: none;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 14px;
+  background: transparent;
+  cursor: pointer;
+  margin: 0;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 1px;
+  background: var(--rule);
+}
+input[type="range"]::-moz-range-track {
+  height: 1px;
+  background: var(--rule);
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-warm);
+  margin-top: -6px;
+  border: none;
+  transition: transform 0.15s ease;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-warm);
+  border: none;
+}
+input[type="range"]:hover::-webkit-slider-thumb {
+  transform: scale(1.25);
+}
+@media (prefers-reduced-motion: reduce) {
+  input[type="range"]::-webkit-slider-thumb {
+    transition: none;
+  }
+}
+
+.rd-controls button {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  padding: 0.4rem 0.95rem;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+  border-radius: 999px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.rd-controls button:hover {
+  color: var(--accent-warm);
+  border-color: var(--accent-warm);
+}
+.rd-controls button.is-active {
+  color: var(--accent-warm);
+  border-color: var(--accent-warm);
+  background: color-mix(in srgb, var(--accent-warm) 8%, transparent);
+}
+
+/* presets row: leading label, then chips */
+.rd-presets {
+  align-items: center;
+  gap: 0.6rem;
+}
+.rd-presets .ctrl-label {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  color: var(--muted);
+  text-transform: lowercase;
+  letter-spacing: 0.06em;
+  margin-right: 0.25rem;
+}
+
+/* notes-shared em boxes */
+.notes em {
+  font-family: var(--mono);
+  font-style: normal;
+  font-size: 0.85em;
+  padding: 0.05em 0.4em;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  color: var(--ink);
+  margin: 0 0.1em;
+}

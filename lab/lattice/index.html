@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Spring lattice — Lab — Yashodhan Mohan Bhatnagar</title>
+    <meta
+      name="description"
+      content="A 30×30 lattice of masses on Hookean springs. Drag a node, release, watch the wavefront radiate. Clamped, free, or sinusoidally driven edges."
+    />
+    <meta name="author" content="Yashodhan Mohan Bhatnagar" />
+    <meta name="keywords" content="wave equation, transverse wave, standing wave, spring lattice, drumhead, Chladni, finite difference, interactive simulation" />
+    <meta name="theme-color" content="#eef0ee" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0c0e14" media="(prefers-color-scheme: dark)" />
+
+    <link rel="canonical" href="https://yashodhanmohan.github.io/lab/lattice/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Spring lattice — Lab — Yashodhan Mohan Bhatnagar" />
+    <meta property="og:description" content="A 30×30 lattice of masses on Hookean springs. Drag a node, release, watch the wavefront radiate." />
+    <meta property="og:url" content="https://yashodhanmohan.github.io/lab/lattice/" />
+    <meta property="og:site_name" content="Yashodhan Mohan Bhatnagar" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content="https://yashodhanmohan.github.io/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Yashodhan Mohan Bhatnagar — Engineer" />
+    <meta property="article:author" content="Yashodhan Mohan Bhatnagar" />
+    <meta property="article:section" content="Lab" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Spring lattice — Lab" />
+    <meta name="twitter:description" content="A 30×30 lattice of masses on Hookean springs. The wave equation, discretised." />
+    <meta name="twitter:image" content="https://yashodhanmohan.github.io/og-image.png" />
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CreativeWork",
+      "@id": "https://yashodhanmohan.github.io/lab/lattice/#artifact",
+      "name": "Spring lattice",
+      "url": "https://yashodhanmohan.github.io/lab/lattice/",
+      "description": "A 30×30 lattice of point masses on Hookean springs. Drag a node, release, watch the wavefront radiate.",
+      "author": { "@type": "Person", "name": "Yashodhan Mohan Bhatnagar", "url": "https://yashodhanmohan.github.io/" },
+      "keywords": "wave equation, transverse wave, standing wave, drumhead, Chladni"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://yashodhanmohan.github.io/" },
+        { "@type": "ListItem", "position": 2, "name": "Lab", "item": "https://yashodhanmohan.github.io/lab/" },
+        { "@type": "ListItem", "position": 3, "name": "Spring lattice", "item": "https://yashodhanmohan.github.io/lab/lattice/" }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <meta name="color-scheme" content="light dark" />
+
+    <link rel="preload" href="/fonts/instrument-serif-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/lab/lab.css" />
+    <link rel="stylesheet" href="/lab/lattice/lattice.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="orb-orbit" aria-hidden="true">
+      <div class="orb orb-a"></div>
+      <div class="orb orb-b"></div>
+    </div>
+
+    <header class="topbar">
+      <a class="mark" href="/">YMB</a>
+      <span class="status">
+        <span class="dot"></span>
+        Vadodara · IST
+      </span>
+    </header>
+
+    <main class="artifact">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/">portfolio</a>
+        <span aria-hidden="true">›</span>
+        <a href="/lab/">lab</a>
+        <span aria-hidden="true">›</span>
+        <span>spring lattice</span>
+      </nav>
+
+      <h1 class="artifact-title">Spring lattice<span class="end-dot">.</span></h1>
+      <p class="artifact-lede">
+        A thirty-by-thirty grid of point masses, each tethered to its four
+        neighbours by a Hookean spring. Pluck any node and a
+        <a
+          href="https://en.wikipedia.org/wiki/Transverse_wave"
+          target="_blank"
+          rel="noreferrer"
+          >transverse wave</a
+        >
+        radiates outward across the membrane. Drag a node and release; switch
+        the boundary between <em>clamped</em>, <em>free</em>, and a sinusoidally
+        <em>driven</em> left edge. In the continuum limit the lattice obeys the
+        <a
+          href="https://en.wikipedia.org/wiki/Wave_equation"
+          target="_blank"
+          rel="noreferrer"
+          >wave equation</a
+        >; tune the drive to a resonance and the chatter resolves into a
+        <a
+          href="https://en.wikipedia.org/wiki/Standing_wave"
+          target="_blank"
+          rel="noreferrer"
+          >standing wave</a
+        >.
+      </p>
+
+      <section class="lattice" aria-label="Spring lattice simulator">
+        <div class="lattice-board">
+          <canvas id="lattice-canvas" aria-label="30 by 30 spring lattice, tilted isometric view"></canvas>
+        </div>
+      </section>
+
+      <section class="lattice-controls">
+        <div class="ctrl-row sliders">
+          <label class="row-control">
+            <span class="label-row">
+              <span>k (stiffness)</span>
+              <span class="value" id="kValue">120</span>
+            </span>
+            <input
+              type="range"
+              id="k"
+              min="10"
+              max="500"
+              step="5"
+              value="120"
+            />
+          </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>damping</span>
+              <span class="value" id="cValue">0.005</span>
+            </span>
+            <input
+              type="range"
+              id="c"
+              min="0"
+              max="0.05"
+              step="0.001"
+              value="0.005"
+            />
+          </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>drive freq</span>
+              <span class="value" id="fValue">0.00 Hz</span>
+            </span>
+            <input
+              type="range"
+              id="f"
+              min="0"
+              max="6"
+              step="0.05"
+              value="0"
+            />
+          </label>
+          <label class="row-control">
+            <span class="label-row">
+              <span>pluck strength</span>
+              <span class="value" id="pValue">0.60</span>
+            </span>
+            <input
+              type="range"
+              id="p"
+              min="0.1"
+              max="1.5"
+              step="0.05"
+              value="0.6"
+            />
+          </label>
+        </div>
+        <div class="ctrl-row buttons">
+          <div class="lattice-edge" role="radiogroup" aria-label="Edge mode">
+            <span class="ctrl-label">edge</span>
+            <button id="edge-clamped" type="button" class="edge-btn is-active" role="radio" aria-checked="true" data-mode="clamped">clamped</button>
+            <button id="edge-free" type="button" class="edge-btn" role="radio" aria-checked="false" data-mode="free">free</button>
+            <button id="edge-driven" type="button" class="edge-btn" role="radio" aria-checked="false" data-mode="driven">driven</button>
+          </div>
+          <button id="reset" type="button">reset</button>
+        </div>
+      </section>
+
+      <section class="notes">
+        <h2>What you're looking at.</h2>
+        <p>
+          Each interior node obeys
+          <em>m·z̈ = k·(z_N + z_S + z_E + z_W − 4z) − c·ż</em>: a Hookean
+          restoring force from the sum of its four neighbour displacements,
+          minus a small velocity drag. Take the lattice spacing
+          <em>h</em> to zero and the bracket becomes the
+          <em>Laplacian</em>, leaving the
+          <a
+            href="https://en.wikipedia.org/wiki/Wave_equation"
+            target="_blank"
+            rel="noreferrer"
+            >wave equation</a
+          >
+          <em>z̈ = v²∇²z</em> with wave speed <em>v = h·√(k/m)</em>. Everything
+          interesting — interference, reflection, dispersion, standing modes —
+          falls out of that one line.
+        </p>
+        <p>
+          Boundaries decide what the wave does when it hits the edge. A
+          <em>clamped</em> edge pins <em>z = 0</em>, so the reflected pulse
+          comes back inverted — the wall enforces a mirror image of opposite
+          sign. A <em>free</em> edge enforces zero gradient instead; the
+          reflection keeps its sign. It's the same distinction that separates
+          a guitar string (clamped at both ends, harmonics at <em>n·v/2L</em>)
+          from an open organ pipe — the same finite lattice, two completely
+          different mode spectra.
+        </p>
+        <p>
+          Switch to <em>driven</em>, push the frequency slider up, and the
+          left column oscillates at <em>A·sin(2πft)</em>. Most frequencies
+          produce a busy interference mess. At the right ones the lattice locks
+          into a
+          <a
+            href="https://en.wikipedia.org/wiki/Standing_wave"
+            target="_blank"
+            rel="noreferrer"
+            >standing wave</a
+          >
+          — fixed nodal lines, antinodes ringing in place. Those are the
+          drumhead's eigenmodes, the two-dimensional cousins of the
+          <a
+            href="https://en.wikipedia.org/wiki/Chladni_pattern"
+            target="_blank"
+            rel="noreferrer"
+            >Chladni patterns</a
+          >
+          that sand grains trace on a bowed metal plate.
+        </p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>© <span id="year">2026</span> Yashodhan Mohan Bhatnagar</span>
+      <span class="muted">Built quietly in Vadodara.</span>
+    </footer>
+
+    <script src="/lab/lattice/lattice.js" defer></script>
+  </body>
+</html>

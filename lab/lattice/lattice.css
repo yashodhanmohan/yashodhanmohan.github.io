@@ -1,0 +1,150 @@
+/* Spring lattice — 30×30 wave membrane. */
+
+.lattice {
+  margin: 0 0 2rem;
+}
+
+.lattice-board {
+  min-width: 0;
+}
+.lattice-board canvas {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 720 / 420;
+  display: block;
+  cursor: grab;
+  touch-action: none;
+}
+.lattice-board canvas.is-dragging {
+  cursor: grabbing;
+}
+
+/* controls */
+.lattice-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+}
+.ctrl-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  align-items: center;
+}
+.ctrl-row.sliders {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 1.5rem;
+}
+.row-control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.row-control .label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-transform: lowercase;
+  letter-spacing: 0.04em;
+}
+.row-control .value {
+  color: var(--ink-soft);
+  font-feature-settings: "tnum" 1;
+  text-transform: none;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 14px;
+  background: transparent;
+  cursor: pointer;
+  margin: 0;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 1px;
+  background: var(--rule);
+}
+input[type="range"]::-moz-range-track {
+  height: 1px;
+  background: var(--rule);
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-warm);
+  margin-top: -6px;
+  border: none;
+  transition: transform 0.15s ease;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-warm);
+  border: none;
+}
+input[type="range"]:hover::-webkit-slider-thumb {
+  transform: scale(1.25);
+}
+
+/* edge-mode radio group */
+.lattice-edge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+.lattice-edge .ctrl-label {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  color: var(--muted);
+  text-transform: lowercase;
+  letter-spacing: 0.06em;
+  margin-right: 0.25rem;
+}
+
+.lattice-controls button {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  padding: 0.4rem 0.95rem;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+  border-radius: 999px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.lattice-controls button:hover {
+  color: var(--accent-warm);
+  border-color: var(--accent-warm);
+}
+.lattice-controls button.edge-btn.is-active {
+  color: var(--accent-warm);
+  border-color: var(--accent-warm);
+  background: color-mix(in srgb, var(--accent-warm) 10%, transparent);
+}
+
+/* notes */
+.notes em {
+  font-family: var(--mono);
+  font-style: normal;
+  font-size: 0.85em;
+  padding: 0.05em 0.4em;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  color: var(--ink);
+  margin: 0 0.1em;
+}
