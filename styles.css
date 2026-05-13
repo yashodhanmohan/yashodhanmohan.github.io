@@ -727,6 +727,83 @@ main {
   color: var(--muted);
 }
 
+/* ---------- lab cards (shared by /lab/ index and the home page) ---------- */
+
+.lab-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .lab-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.75rem 2rem;
+  }
+}
+
+@media (min-width: 1000px) {
+  .lab-list {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem 2.25rem;
+  }
+}
+
+.lab-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.5rem 0 0;
+  text-decoration: none;
+  color: inherit;
+  border-top: 1px solid var(--rule);
+  height: 100%;
+  position: relative;
+}
+.lab-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -1px;
+  height: 2px;
+  width: 0;
+  background: var(--accent-warm);
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.lab-card:hover::before {
+  width: 55%;
+}
+
+.lab-num {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--accent-warm);
+  letter-spacing: 0.04em;
+}
+.lab-name {
+  font-family: var(--serif);
+  font-size: 1.55rem;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  color: var(--ink);
+}
+.lab-meta {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  color: var(--muted);
+  text-transform: lowercase;
+  letter-spacing: 0.04em;
+}
+.lab-desc {
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-top: 0.3rem;
+}
+
 /* ---------- selection ---------- */
 
 ::selection {
